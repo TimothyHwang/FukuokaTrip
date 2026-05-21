@@ -6,6 +6,20 @@ const { ROOT, readJson, escapeRegex } = require('./lib/utils');
 const MANIFEST = path.join(ROOT, 'data/image-manifest.json');
 const htmlPath = path.join(ROOT, 'index.html');
 
+/** 每日封面維持原本 Unsplash 主題圖，不套用本地 images/days/ */
+const DAY_COVERS = {
+  1: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&q=80&fit=crop',
+  2: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=400&q=80&fit=crop',
+  3: 'https://images.unsplash.com/photo-1590559899731-a382839e5549?w=400&q=80&fit=crop',
+  4: 'images/spots/d04-spot-item-5.jpg',
+  5: 'https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=400&q=80&fit=crop',
+  6: 'https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=400&q=80&fit=crop',
+  7: 'https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=400&q=80&fit=crop',
+  8: 'https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=400&q=80&fit=crop',
+  9: 'images/days/d09-day-cover-item.jpg',
+  10: 'images/spots/d10-spot-item-2.jpg',
+};
+
 function buildLookup(items) {
   const byKey = new Map();
   for (const it of items) {
@@ -40,14 +54,10 @@ function main() {
     const t = line.match(/^\s*title:\s*"([^"]+)"/);
     if (t) dayTitle = t[1];
 
-    const titleM = line.match(/^\s*img:\s*(IMG\.day\d+)/);
-    if (titleM && dayTitle) {
-      const key = `${day}|${dayTitle}|${dayTitle}`;
-      const it = lookup.get(key);
-      if (it && fs.existsSync(path.join(ROOT, it.localPath))) {
-        out.push(line.replace(titleM[0], `img: "${it.localPath}"`));
-        continue;
-      }
+    const dayImgM = line.match(/^\s*img:\s*("([^"]+)"|IMG\.day\d+)/);
+    if (dayImgM && dayTitle && DAY_COVERS[day]) {
+      out.push(line.replace(dayImgM[0], `img: "${DAY_COVERS[day]}"`));
+      continue;
     }
 
     const replaced = line.replace(cardRe, (full, pre, nameRaw, imgKey, post, mapsRaw) => {
