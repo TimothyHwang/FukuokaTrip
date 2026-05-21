@@ -1,0 +1,11 @@
+const fs = require('fs');
+const path = require('path');
+const ROOT = path.join(__dirname, '..');
+const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const start = html.indexOf('const days = [');
+const end = html.indexOf('function renderItinerary', start);
+const block = html.slice(start, end);
+const re = /\{\s*name:"((?:\\.|[^"\\])*)"(?:[^}]*?)img:(IMG\.\w+)(?:[^}]*?)maps:"((?:\\.|[^"\\])*)"/g;
+let n = 0;
+while (re.exec(block)) n++;
+console.log('card objects with img+maps:', n);
