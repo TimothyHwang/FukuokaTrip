@@ -287,20 +287,133 @@ function createSlotHTML(slot) {
   </div>`;
 }
 
-// ─── PHOTO SHORTCUTS ───
-const P = id => `https://images.unsplash.com/photo-${id}?w=400&q=80&fit=crop`;
-const F = id => `https://images.unsplash.com/photo-${id}?w=300&q=80&fit=crop`;
-const RAMEN = F('1557872943-16a5ac26437e');
-const SUSHI = F('1611143669185-af224c5e3252');
-const GYOZA = F('1496116218417-1a781b1c416c');
-const BURGER = F('1568901346375-23c9450c58cd');
-const UNAJU = F('1569050467447-ce54b3bbc37d');
-const SWEET = F('1551024601-bec78aea704b');
-const MENTA = F('1582450871972-ab5ca641643d');
-const SEAFOOD = F('1534482421-64566f976cfa');
-const COFFEE = F('1495474472287-4d71bcdd2085');
-const PANCAKE = F('1567620905732-2d1ec7ab7445');
-const UDON = F('1569050467447-ce54b3bbc37d');
+// ─── PHOTO LIBRARY（每張圖片唯一，依主題分類）───
+const U = id => `https://images.unsplash.com/photo-${id}?w=400&q=80&fit=crop`;
+const UF = id => `https://images.unsplash.com/photo-${id}?w=300&q=80&fit=crop`;
+
+const IMG = {
+  // 每日封面
+  day1: U('1542051841857-5f90071e7989'),
+  day2: U('1505118380757-91f5f5632de0'),
+  day3: U('1590559899731-a382839e5549'),
+  day4: U('1493976040374-85c8e0776520'),
+  day5: U('1580822184713-fc5400e7fe10'),
+  day6: U('1553361371-9b22f78e8b1d'),
+  day7: U('1555400038-63f5ba517a47'),
+  day8: U('1519451241324-20b4ea2c4220'),
+  day9: U('1494500763415-0c5228a927d8'),
+  day10: U('1526483360612-faa888483927'),
+
+  // 福岡市區
+  hakataStation: U('1493976040374-85c8e0776520'),
+  canalCity: U('1578662996442-48f60103fc96'),
+  kawabata: U('1528360983277-13d401cdc186'),
+  kushida: U('1545569341-9eb83923e6f1'),
+  nakasuYatai: U('1480796929009-993710644d41'),
+  tenjin: U('1478436121027-6f6e06daf847'),
+  ohoriPark: U('1470071459604-3b5ec3a7fe05'),
+  fukuokaTower: U('1542051841857-5f90071e7989'),
+  mentaikoMuseum: U('1582450871972-ab5ca641643d'),
+
+  // 長崎・佐世保
+  kujukushima: U('1505118380757-91f5f5632de0'),
+  gloverGarden: U('1565008576549-57569a49371d'),
+  ouraChurch: U('1555883641-6aed325b9061'),
+  dejima: U('1528164343983-9f2c0d2b7f3e'),
+  nagasakiChinatown: U('1480796929009-993710644d41'),
+  peacePark: U('1478436121027-6f6e06daf847'),
+  meganebashi: U('1597070616688-3269b0c6f4ba'),
+  inasaNight: U('1493976040374-85c8e0776520'),
+  tram: U('1553530979-212c53e7d74c'),
+
+  // 熊本
+  kumamotoCastle: U('1590559899731-a382839e5549'),
+  kumamotoNight: U('1493976040374-85c8e0776520'),
+  shimotori: U('1528360983277-13d401cdc186'),
+  kumamon: U('1558618666-fcd25c85cd64'),
+  suizenji: U('1470071459604-3b5ec3a7fe05'),
+
+  // 由布院・別府
+  kinrinLake: U('1580822184713-fc5400e7fe10'),
+  kinrinMist: U('1490806842598-08633447ebc5'),
+  yufuinTrain: U('1553530979-212c53e7d74c'),
+  yufuinStreet: U('1506905925346-21bda4d32df4'),
+  yufuinOnsen: U('1540553019605-5bd059c80091'),
+  umiJigoku: U('1553361371-9b22f78e8b1d'),
+  chiJigoku: U('1578985543158-32edf0a6f608'),
+  tatsumakiJigoku: U('1547595628-c61a29f496f0'),
+  shiraikeJigoku: U('1470071459604-3b5ec3a7fe05'),
+  beppuTower: U('1493976040374-85c8e0776520'),
+
+  // 門司港・下關
+  mojikoRetro: U('1555400038-63f5ba517a47'),
+  mojikoCustoms: U('1565008576549-57569a49371d'),
+  kanmonStrait: U('1526483360612-faa888483927'),
+  karatoMarket: U('1519708227411-c4994907559c'),
+  kokuraCastle: U('1519451241324-20b4ea2c4220'),
+
+  // 太宰府・柳川・宮地嶽
+  dazaifu: U('1519451241324-20b4ea2c4220'),
+  dazaifuStarbucks: U('1528164343983-9f2c0d2b7f3e'),
+  kamado: U('1545569341-9eb83923e6f1'),
+  yanagawaBoat: U('1470071459604-3b5ec3a7fe05'),
+  yanagawaGarden: U('1490806842598-08633447ebc5'),
+  miyajidake: U('1494500763415-0c5228a927d8'),
+  miyajidakeBeach: U('1505118380757-91f5f5632de0'),
+
+  // 糸島
+  itoshimaBeach: U('1494500763415-0c5228a927d8'),
+  palmSwing: U('1507525428034-b723cf961d3e'),
+  angelWings: U('1507525428034-b723cf961d3e'),
+  futamigaura: U('1505118380757-91f5f5632de0'),
+  keyaCave: U('1506905925346-21bda4d32df4'),
+  shiraitoFall: U('1470071459604-3b5ec3a7fe05'),
+  itoshimaSunset: U('1494500763415-0c5228a927d8'),
+  londonBus: U('1558618666-fcd25c85cd64'),
+
+  // 美食（每種不同圖）
+  ramen1: UF('1557872943-16a5ac26437e'),
+  ramen2: UF('1617098846-5574b04c6dfd'),
+  ramen3: UF('1569718213715-88347444a343'),
+  ramen4: UF('1591814408942-7a1626f1b9b5'),
+  udon1: UF('1618841557873-88f739b1711f'),
+  udon2: UF('1569050467447-ce54b3bbc37d'),
+  tempura: UF('1546069901-ba9599a7e63c'),
+  sushi1: UF('1611143669185-af224c5e3252'),
+  sushi2: UF('1579584425555-c3b39bb3b4cb'),
+  coffee1: UF('1495474472287-4d71bcdd2085'),
+  coffee2: UF('1447933603381-6474a0937656'),
+  coffee3: UF('150904093074f-7ee9ed597a54'),
+  coffee4: UF('1511920170033-f390bbf4b584'),
+  pancake1: UF('1567620905732-2d1ec7ab7445'),
+  pancake2: UF('1482046541867-932a0840ee31'),
+  pancake3: UF('1525351484162-5f7e6210b9c4'),
+  burger1: UF('1568901346375-23c9450c58cd'),
+  burger2: UF('1550547660-945a2070ef9f'),
+  burger3: UF('1553971043-2247d2611f9a'),
+  unaju1: UF('1559317840-3360d194123a'),
+  unaju2: UF('1569050467447-ce54b3bbc37d'),
+  sweet1: UF('1551024601-bec78aea704b'),
+  sweet2: UF('1486427944689-c67a7fd3cc0a'),
+  sweet3: UF('1606312619070-7410b6d9c5f7'),
+  menta1: UF('1582450871972-ab5ca641643d'),
+  menta2: UF('1547595628-c61a29f496f0'),
+  seafood1: UF('1534482421-64566f976cfa'),
+  seafood2: UF('1553620532-d40e61c662c5'),
+  seafood3: UF('1519708227411-c4994907559c'),
+  gyoza: UF('1496116218417-1a781b1c416c'),
+  curry: UF('1455610502054-b13981274064'),
+  hotpot: UF('1547595628-c61a29f496f0'),
+  yakitori: UF('1604908623376-7c3b35c9be1a'),
+  oyster: UF('1559339352-11e68596646e'),
+  castella: UF('1574480382382-4af15c332396'),
+  onsenFood: UF('1540553019605-5bd059c80091'),
+  breakfast: UF('1533089864083-721a5431d1c8'),
+  wagashi: UF('1606312619070-7410b6d9c5f7'),
+  airport: UF('1436491865332-7a61a109cc05'),
+};
+// 修正無效 ID 的備援
+IMG.angelWings = U('1507525428034-b723cf961d3e');
 
 const days = [
   // ────────────────────────────────────────────────────────
@@ -309,55 +422,55 @@ const days = [
   {
     title: "抵達博多",
     sub: "JR博多City · 博多運河城 · 中洲屋台",
-    img: P('1542051841857-5f90071e7989'),
+    img: IMG.day1,
     slots: [
       {
         type:"morning", emoji:"☀️", label:"早餐",
         title: "博多駅周邊早餐選擇",
         spots: [
-          { name:"THE ALLDAY ORTO", desc:"縣產食材・附設奶酪工房", img:COFFEE, maps:"THE ALLDAY ORTO 博多", tags:["攻略必去"] },
-          { name:"soel 古民家咖啡", desc:"築60年古民家・自製フォカッチャ", img:COFFEE, maps:"soel カフェ 福岡", tags:["IG熱點"] },
+          { name:"THE ALLDAY ORTO", desc:"縣產食材・附設奶酪工房", img:IMG.coffee2, maps:"THE ALLDAY ORTO 博多", tags:["攻略必去"] },
+          { name:"soel 古民家咖啡", desc:"築60年古民家・自製フォカッチャ", img:IMG.coffee3, maps:"soel カフェ 福岡", tags:["IG熱點"] },
         ],
         foods: [
-          { name:"THE ALLDAY ORTO", desc:"縣產野菜早餐套餐", img:COFFEE, maps:"THE ALLDAY ORTO 博多", tags:["攻略必去"] },
-          { name:"soel", desc:"自製佛卡夏・旬野菜套餐 1,700円", img:COFFEE, maps:"soel カフェ 福岡住吉", tags:["IG熱點"] },
-          { name:"ROUND COUNTER", desc:"ダブルエッグトースト・REC COFFEE", img:COFFEE, maps:"ROUND COUNTER 福岡", tags:["攻略必去"] },
-          { name:"JWTカフェ", desc:"北歐風・フレンチトースト 1,100円", img:COFFEE, maps:"JWTカフェ 福岡天神", tags:["IG熱點"] },
-          { name:"白金茶房", desc:"一軒家パンケーキ・8:00開", img:PANCAKE, maps:"白金茶房 福岡", tags:["IG熱點","攻略必去"] },
-          { name:"NATIVE Fukuoka", desc:"印尼系咖啡廳・9:00~深夜", img:COFFEE, maps:"NATIVE Fukuoka 博多", tags:["IG熱點"] },
+          { name:"THE ALLDAY ORTO", desc:"縣產野菜早餐套餐", img:IMG.breakfast, maps:"THE ALLDAY ORTO 博多", tags:["攻略必去"] },
+          { name:"soel", desc:"自製佛卡夏・旬野菜套餐 1,700円", img:IMG.coffee3, maps:"soel カフェ 福岡住吉", tags:["IG熱點"] },
+          { name:"ROUND COUNTER", desc:"ダブルエッグトースト・REC COFFEE", img:IMG.coffee4, maps:"ROUND COUNTER 福岡", tags:["攻略必去"] },
+          { name:"JWTカフェ", desc:"北歐風・フレンチトースト 1,100円", img:IMG.pancake2, maps:"JWTカフェ 福岡天神", tags:["IG熱點"] },
+          { name:"白金茶房", desc:"一軒家パンケーキ・8:00開", img:IMG.pancake1, maps:"白金茶房 福岡", tags:["IG熱點","攻略必去"] },
+          { name:"NATIVE Fukuoka", desc:"印尼系咖啡廳・9:00~深夜", img:IMG.coffee1, maps:"NATIVE Fukuoka 博多", tags:["IG熱點"] },
         ]
       },
       {
         type:"day", emoji:"🌤️", label:"上午/下午",
         title: "博多市區探索",
         spots: [
-          { name:"JR博多City", desc:"購物・美食・屋上庭園", img:P('1542051841857-5f90071e7989'), maps:"JR博多シティ", tags:["攻略必去"] },
-          { name:"博多運河城", desc:"鋼彈水舞秀・霓虹夜景", img:P('1542051841857-5f90071e7989'), maps:"博多キャナルシティ", tags:["攻略必去","IG熱點"] },
-          { name:"川端商店街", desc:"百年老街・傳統商店", img:P('1528360983277-13d401cdc186'), maps:"川端商店街 福岡", tags:["攻略必去"] },
-          { name:"櫛田神社", desc:"祇園山笠發源地・博多總鎮守", img:P('1519451241324-20b4ea2c4220'), maps:"櫛田神社 福岡", tags:["攻略必去"] },
+          { name:"JR博多City", desc:"購物・美食・屋上庭園", img:IMG.hakataStation, maps:"JR博多シティ", tags:["攻略必去"] },
+          { name:"博多運河城", desc:"鋼彈水舞秀・霓虹夜景", img:IMG.canalCity, maps:"博多キャナルシティ", tags:["攻略必去","IG熱點"] },
+          { name:"川端商店街", desc:"百年老街・傳統商店", img:IMG.kawabata, maps:"川端商店街 福岡", tags:["攻略必去"] },
+          { name:"櫛田神社", desc:"祇園山笠發源地・博多總鎮守", img:IMG.kushida, maps:"櫛田神社 福岡", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"一双拉麵", desc:"博多車站東本店・濃厚豚骨", img:RAMEN, maps:"一双拉麵 博多駅東", tags:["台灣推薦","攻略必去"] },
-          { name:"麵屋 ISHII", desc:"奶油明太子釜玉烏龍・9:30開", img:UDON, maps:"麺屋ISHII 博多", tags:["台灣推薦","攻略必去"] },
-          { name:"萬田うどん 天神", desc:"肉ごぼう天・天神站直結", img:UDON, maps:"万田うどん 天神", tags:["攻略必去"] },
-          { name:"天麩羅処ひらお", desc:"炸蝦天婦羅・免費いか塩辛", img:RAMEN, maps:"天ぷら処ひらお 天神", tags:["攻略必去","台灣推薦"] },
-          { name:"博多一番街", desc:"車站地下美食街・多種選擇", img:RAMEN, maps:"博多一番街 福岡", tags:["攻略必去"] },
+          { name:"一双拉麵", desc:"博多車站東本店・濃厚豚骨", img:IMG.ramen1, maps:"一双拉麵 博多駅東", tags:["台灣推薦","攻略必去"] },
+          { name:"麵屋 ISHII", desc:"奶油明太子釜玉烏龍・9:30開", img:IMG.udon1, maps:"麺屋ISHII 博多", tags:["台灣推薦","攻略必去"] },
+          { name:"萬田うどん 天神", desc:"肉ごぼう天・天神站直結", img:IMG.udon2, maps:"万田うどん 天神", tags:["攻略必去"] },
+          { name:"天麩羅処ひらお", desc:"炸蝦天婦羅・免費いか塩辛", img:IMG.tempura, maps:"天ぷら処ひらお 天神", tags:["攻略必去","台灣推薦"] },
+          { name:"博多一番街", desc:"車站地下美食街・多種選擇", img:IMG.ramen2, maps:"博多一番街 福岡", tags:["攻略必去"] },
         ]
       },
       {
         type:"night", emoji:"🌙", label:"晚餐",
         title: "博多拉麵名店集結",
         spots: [
-          { name:"中洲 屋台街", desc:"夜間霓虹燈・拉麵攤雲集", img:P('1542051841857-5f90071e7989'), maps:"中洲屋台 福岡", tags:["攻略必去","IG熱點"] },
+          { name:"中洲 屋台街", desc:"夜間霓虹燈・拉麵攤雲集", img:IMG.nakasuYatai, maps:"中洲屋台 福岡", tags:["攻略必去","IG熱點"] },
         ],
         foods: [
-          { name:"博多拉麵 ShinShin 天神", desc:"清爽豚骨・Tabelog 3.58", img:RAMEN, maps:"博多らーめんShinShin天神本店", tags:["台灣推薦","Tabelog 3.58"] },
-          { name:"一蘭拉麵 博多本店", desc:"獨立隔間・濃厚豚骨・24H", img:RAMEN, maps:"一蘭ラーメン博多本店", tags:["台灣推薦","Tabelog 3.71"] },
-          { name:"麵屋兼虎 天神本店", desc:"魚介豚骨沾麵・百名店", img:RAMEN, maps:"麺屋兼虎天神本店", tags:["台灣推薦","Tabelog 3.72"] },
-          { name:"大砲拉麵 天神", desc:"創業70年・久留米系老舖", img:RAMEN, maps:"大砲ラーメン天神店", tags:["攻略必去","Tabelog 3.55"] },
-          { name:"博多 一叶", desc:"泡系豚骨・2026新開幕行列店", img:RAMEN, maps:"博多一叶 南福岡", tags:["攻略必去"] },
-          { name:"博多華味鳥", desc:"水炊き白湯鍋・博多名物", img:RAMEN, emoji:"🍲", maps:"博多華味鳥 天神", tags:["台灣推薦","攻略必去"] },
-          { name:"もつ鍋 一慶", desc:"もつ鍋・博多特色内臓鍋", emoji:"🍲", maps:"もつ鍋一慶 博多", tags:["攻略必去"] },
+          { name:"博多拉麵 ShinShin 天神", desc:"清爽豚骨・Tabelog 3.58", img:IMG.ramen2, maps:"博多らーめんShinShin天神本店", tags:["台灣推薦","Tabelog 3.58"] },
+          { name:"一蘭拉麵 博多本店", desc:"獨立隔間・濃厚豚骨・24H", img:IMG.ramen1, maps:"一蘭ラーメン博多本店", tags:["台灣推薦","Tabelog 3.71"] },
+          { name:"麵屋兼虎 天神本店", desc:"魚介豚骨沾麵・百名店", img:IMG.ramen3, maps:"麺屋兼虎天神本店", tags:["台灣推薦","Tabelog 3.72"] },
+          { name:"大砲拉麵 天神", desc:"創業70年・久留米系老舖", img:IMG.ramen4, maps:"大砲ラーメン天神店", tags:["攻略必去","Tabelog 3.55"] },
+          { name:"博多 一叶", desc:"泡系豚骨・2026新開幕行列店", img:IMG.ramen3, maps:"博多一叶 南福岡", tags:["攻略必去"] },
+          { name:"博多華味鳥", desc:"水炊き白湯鍋・博多名物", img:IMG.hotpot, img:IMG.hotpot, maps:"博多華味鳥 天神", tags:["台灣推薦","攻略必去"] },
+          { name:"もつ鍋 一慶", desc:"もつ鍋・博多特色内臓鍋", img:IMG.hotpot, emoji:"🍲", maps:"もつ鍋一慶 博多", tags:["攻略必去"] },
         ]
       },
       {
@@ -378,48 +491,48 @@ const days = [
   {
     title: "佐世保 + 長崎",
     sub: "北九州 Pass 第1日 · 九十九島 · 稻佐山三大夜景",
-    img: P('1565008576549-57569a49371d'),
+    img: IMG.day2,
     slots: [
       {
         type:"morning", emoji:"☀️", label:"早餐",
         title: "博多站出發・車上享用",
         spots: [
-          { name:"博多站月台便當", desc:"出發前購買・特選駅弁", emoji:"🍱", maps:"博多駅 駅弁", tags:["攻略必去"] },
+          { name:"博多站月台便當", desc:"出發前購買・特選駅弁", img:IMG.breakfast, maps:"博多駅 駅弁", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"博多一番街 晨食", desc:"車站地下・外帶方便", img:RAMEN, maps:"博多一番街", tags:["攻略必去"] },
-          { name:"新幹線・列車便當", desc:"月台購買・駅弁文化體驗", emoji:"🍱", maps:"博多駅 駅弁", tags:["攻略必去"] },
+          { name:"博多一番街 晨食", desc:"車站地下・外帶方便", img:IMG.ramen2, maps:"博多一番街", tags:["攻略必去"] },
+          { name:"新幹線・列車便當", desc:"月台購買・駅弁文化體驗", img:IMG.breakfast, maps:"博多駅 駅弁", tags:["攻略必去"] },
         ]
       },
       {
         type:"day", emoji:"🌤️", label:"上午/下午",
         title: "佐世保 → 長崎",
         spots: [
-          { name:"九十九島遊覧船", desc:"日本百景・翠綠島群", img:P('1505118380757-91f5f5632de0'), maps:"九十九島遊覧船 佐世保", tags:["攻略必去","IG熱點"] },
-          { name:"哥拉巴園", desc:"世界遺產・明治洋館群", img:P('1565008576549-57569a49371d'), maps:"グラバー園 長崎", tags:["攻略必去"] },
-          { name:"大浦天主堂", desc:"世界遺產・1864年建造", img:P('1565008576549-57569a49371d'), maps:"大浦天主堂 長崎", tags:["攻略必去"] },
-          { name:"出島（出島ワーフ）", desc:"江戶時代歐洲貿易據點", img:P('1565008576549-57569a49371d'), maps:"出島 長崎", tags:["攻略必去"] },
+          { name:"九十九島遊覧船", desc:"日本百景・翠綠島群", img:IMG.kujukushima, maps:"九十九島遊覧船 佐世保", tags:["攻略必去","IG熱點"] },
+          { name:"哥拉巴園", desc:"世界遺產・明治洋館群", img:IMG.gloverGarden, maps:"グラバー園 長崎", tags:["攻略必去"] },
+          { name:"大浦天主堂", desc:"世界遺產・1864年建造", img:IMG.ouraChurch, maps:"大浦天主堂 長崎", tags:["攻略必去"] },
+          { name:"出島（出島ワーフ）", desc:"江戶時代歐洲貿易據點", img:IMG.dejima, maps:"出島 長崎", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"Big Man 佐世保漢堡", desc:"始祖・排隊名店", img:BURGER, maps:"ビッグマン佐世保ハンバーガー", tags:["台灣推薦","攻略必去"] },
-          { name:"LOG KIT", desc:"佐世保人氣漢堡店", img:BURGER, maps:"LOG KIT 佐世保ハンバーガー", tags:["攻略必去"] },
-          { name:"ヒカリ", desc:"創業70年老字號漢堡", img:BURGER, maps:"ヒカリ佐世保ハンバーガー", tags:["攻略必去"] },
-          { name:"いずみや", desc:"海軍風格漢堡・佐世保在地", img:BURGER, maps:"いずみや佐世保", tags:["攻略必去"] },
-          { name:"長崎 哥拉巴Tea House", desc:"哥拉巴園內・景觀咖啡", img:COFFEE, maps:"グラバー園 カフェ 長崎", tags:["IG熱點"] },
+          { name:"Big Man 佐世保漢堡", desc:"始祖・排隊名店", img:IMG.burger1, maps:"ビッグマン佐世保ハンバーガー", tags:["台灣推薦","攻略必去"] },
+          { name:"LOG KIT", desc:"佐世保人氣漢堡店", img:IMG.burger2, maps:"LOG KIT 佐世保ハンバーガー", tags:["攻略必去"] },
+          { name:"ヒカリ", desc:"創業70年老字號漢堡", img:IMG.burger3, maps:"ヒカリ佐世保ハンバーガー", tags:["攻略必去"] },
+          { name:"いずみや", desc:"海軍風格漢堡・佐世保在地", img:IMG.burger1, maps:"いずみや佐世保", tags:["攻略必去"] },
+          { name:"長崎 哥拉巴Tea House", desc:"哥拉巴園內・景觀咖啡", img:IMG.coffee2, maps:"グラバー園 カフェ 長崎", tags:["IG熱點"] },
         ]
       },
       {
         type:"night", emoji:"🌙", label:"晚餐",
         title: "長崎名物料理",
         spots: [
-          { name:"長崎中華街", desc:"日本三大中華街之一・夜間燈光", img:P('1565008576549-57569a49371d'), maps:"長崎新地中華街", tags:["攻略必去"] },
+          { name:"長崎中華街", desc:"日本三大中華街之一・夜間燈光", img:IMG.nagasakiChinatown, maps:"長崎新地中華街", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"四海樓", desc:"ちゃんぽん發源店（1899年）", emoji:"🍜", maps:"四海楼 長崎", tags:["台灣推薦","Tabelog 3.62","攻略必去"] },
-          { name:"江山樓", desc:"長崎中華料理老舖", emoji:"🍜", maps:"江山楼 長崎中華街", tags:["攻略必去"] },
-          { name:"思案橋ラーメン", desc:"長崎風豚骨・在地人最愛", img:RAMEN, maps:"思案橋ラーメン 長崎", tags:["攻略必去"] },
-          { name:"長崎海鮮居酒屋", desc:"港口直送・季節漁獲", img:SEAFOOD, maps:"長崎 海鮮居酒屋", tags:["攻略必去"] },
-          { name:"卓袱（しっぽく）料理", desc:"長崎特色宴席料理", emoji:"🍱", maps:"卓袱料理 長崎", tags:["攻略必去"] },
+          { name:"四海樓", desc:"ちゃんぽん發源店（1899年）", img:IMG.ramen3, maps:"四海楼 長崎", tags:["台灣推薦","Tabelog 3.62","攻略必去"] },
+          { name:"江山樓", desc:"長崎中華料理老舖", img:IMG.ramen4, maps:"江山楼 長崎中華街", tags:["攻略必去"] },
+          { name:"思案橋ラーメン", desc:"長崎風豚骨・在地人最愛", img:IMG.ramen2, maps:"思案橋ラーメン 長崎", tags:["攻略必去"] },
+          { name:"長崎海鮮居酒屋", desc:"港口直送・季節漁獲", img:IMG.seafood1, maps:"長崎 海鮮居酒屋", tags:["攻略必去"] },
+          { name:"卓袱（しっぽく）料理", desc:"長崎特色宴席料理", img:IMG.seafood2, maps:"卓袱料理 長崎", tags:["攻略必去"] },
         ]
       },
       {
@@ -439,51 +552,51 @@ const days = [
   {
     title: "長崎 + 熊本",
     sub: "北九州 Pass 第2日 · 平和公園 · 眼鏡橋",
-    img: P('1590559899731-a382839e5549'),
+    img: IMG.day3,
     slots: [
       {
         type:"morning", emoji:"☀️", label:"早餐",
         title: "長崎蛋糕老舖巡禮",
         spots: [
-          { name:"文明堂 長崎本店", desc:"百年カステラ老舖", emoji:"🎂", maps:"文明堂 長崎本店", tags:["攻略必去"] },
+          { name:"文明堂 長崎本店", desc:"百年カステラ老舖", img:IMG.castella, maps:"文明堂 長崎本店", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"文明堂", desc:"傳統カステラ・百年老舖", emoji:"🎂", maps:"文明堂 長崎", tags:["台灣推薦","攻略必去"] },
-          { name:"福砂屋", desc:"1624年創業・最古カステラ", emoji:"🎂", maps:"福砂屋 長崎", tags:["攻略必去"] },
-          { name:"松翁軒", desc:"長崎老字號・チョコラーテ卡斯提拉", emoji:"🎂", maps:"松翁軒 長崎", tags:["攻略必去"] },
-          { name:"長崎 ブリック", desc:"港口咖啡廳・海景早餐", img:COFFEE, maps:"ブリック 長崎カフェ", tags:["IG熱點"] },
+          { name:"文明堂", desc:"傳統カステラ・百年老舖", img:IMG.castella, maps:"文明堂 長崎", tags:["台灣推薦","攻略必去"] },
+          { name:"福砂屋", desc:"1624年創業・最古カステラ", img:IMG.sweet2, maps:"福砂屋 長崎", tags:["攻略必去"] },
+          { name:"松翁軒", desc:"長崎老字號・チョコラーテ卡斯提拉", img:IMG.sweet3, maps:"松翁軒 長崎", tags:["攻略必去"] },
+          { name:"長崎 ブリック", desc:"港口咖啡廳・海景早餐", img:IMG.coffee3, maps:"ブリック 長崎カフェ", tags:["IG熱點"] },
         ]
       },
       {
         type:"day", emoji:"🌤️", label:"上午/下午",
         title: "長崎歷史散策 → 熊本",
         spots: [
-          { name:"平和公園", desc:"原爆紀念地・和平祈願雕像", img:P('1565008576549-57569a49371d'), maps:"長崎平和公園", tags:["攻略必去"] },
-          { name:"原爆資料館", desc:"免費參觀・歷史見證", img:P('1565008576549-57569a49371d'), maps:"長崎原爆資料館", tags:["攻略必去"] },
-          { name:"眼鏡橋", desc:"日本最古石拱橋・長崎象徵", img:P('1565008576549-57569a49371d'), maps:"眼鏡橋 長崎", tags:["攻略必去","IG熱點"] },
-          { name:"路面電車漫遊", desc:"長崎市區交通・復古電車體驗", emoji:"🚃", maps:"長崎電気軌道", tags:["攻略必去"] },
-          { name:"熊本城", desc:"日本三大名城・天守閣復原完成", img:P('1590559899731-a382839e5549'), maps:"熊本城", tags:["攻略必去","IG熱點"] },
+          { name:"平和公園", desc:"原爆紀念地・和平祈願雕像", img:IMG.peacePark, maps:"長崎平和公園", tags:["攻略必去"] },
+          { name:"原爆資料館", desc:"免費參觀・歷史見證", img:IMG.gloverGarden, maps:"長崎原爆資料館", tags:["攻略必去"] },
+          { name:"眼鏡橋", desc:"日本最古石拱橋・長崎象徵", img:IMG.meganebashi, maps:"眼鏡橋 長崎", tags:["攻略必去","IG熱點"] },
+          { name:"路面電車漫遊", desc:"長崎市區交通・復古電車體驗", img:IMG.tram, maps:"長崎電気軌道", tags:["攻略必去"] },
+          { name:"熊本城", desc:"日本三大名城・天守閣復原完成", img:IMG.kumamotoCastle, maps:"熊本城", tags:["攻略必去","IG熱點"] },
         ],
         foods: [
-          { name:"長崎皿烏龍麵", desc:"麵上淋芡・長崎獨有吃法", emoji:"🍜", maps:"皿うどん 長崎", tags:["台灣推薦","攻略必去"] },
-          { name:"ちゃんぽん 路地裏店", desc:"庶民版什錦麵・在地口味", emoji:"🍜", maps:"ちゃんぽん 長崎 路地裏", tags:["攻略必去"] },
-          { name:"角煮まんじゅう", desc:"長崎名物東坡肉包・街頭小食", emoji:"🥟", maps:"角煮まんじゅう 長崎", tags:["台灣推薦"] },
-          { name:"長崎 RYOZAN", desc:"長崎海鮮丼・港口新鮮食材", img:SEAFOOD, maps:"RYOZAN 長崎", tags:["攻略必去"] },
+          { name:"長崎皿烏龍麵", desc:"麵上淋芡・長崎獨有吃法", img:IMG.udon1, maps:"皿うどん 長崎", tags:["台灣推薦","攻略必去"] },
+          { name:"ちゃんぽん 路地裏店", desc:"庶民版什錦麵・在地口味", img:IMG.ramen3, maps:"ちゃんぽん 長崎 路地裏", tags:["攻略必去"] },
+          { name:"角煮まんじゅう", desc:"長崎名物東坡肉包・街頭小食", img:IMG.gyoza, maps:"角煮まんじゅう 長崎", tags:["台灣推薦"] },
+          { name:"長崎 RYOZAN", desc:"長崎海鮮丼・港口新鮮食材", img:IMG.seafood3, maps:"RYOZAN 長崎", tags:["攻略必去"] },
         ]
       },
       {
         type:"night", emoji:"🌙", label:"晚餐",
         title: "熊本在地料理",
         spots: [
-          { name:"熊本城外苑", desc:"夜間石垣照明・絕美天守", img:P('1590559899731-a382839e5549'), maps:"熊本城 夜景", tags:["IG熱點"] },
-          { name:"下通商店街", desc:"熊本最大商店街・夜間逛街", img:P('1528360983277-13d401cdc186'), maps:"下通商店街 熊本", tags:["攻略必去"] },
+          { name:"熊本城外苑", desc:"夜間石垣照明・絕美天守", img:IMG.kumamotoNight, maps:"熊本城 夜景", tags:["IG熱點"] },
+          { name:"下通商店街", desc:"熊本最大商店街・夜間逛街", img:IMG.shimotori, maps:"下通商店街 熊本", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"黒亭", desc:"熊本黑拉麵元祖・黑蒜油豚骨", img:RAMEN, maps:"黒亭ラーメン 熊本", tags:["台灣推薦","Tabelog 3.63","攻略必去"] },
-          { name:"天外天", desc:"黑蒜油豚骨・熊本市區", img:RAMEN, maps:"天外天ラーメン 熊本", tags:["攻略必去"] },
-          { name:"利用閣", desc:"馬刺し老舖・生馬肉必吃", emoji:"🐴", maps:"利用閣 熊本 馬刺し", tags:["台灣推薦","攻略必去"] },
-          { name:"馬肉握壽司", desc:"熊本特產・新鮮馬肉握壽司", emoji:"🍣", maps:"馬肉寿司 熊本", tags:["台灣推薦"] },
-          { name:"太平燕（五郎八）", desc:"春雨什錦湯麵・熊本早餐文化", emoji:"🍜", maps:"五郎八 太平燕 熊本", tags:["攻略必去"] },
+          { name:"黒亭", desc:"熊本黑拉麵元祖・黑蒜油豚骨", img:IMG.ramen1, maps:"黒亭ラーメン 熊本", tags:["台灣推薦","Tabelog 3.63","攻略必去"] },
+          { name:"天外天", desc:"黑蒜油豚骨・熊本市區", img:IMG.ramen4, maps:"天外天ラーメン 熊本", tags:["攻略必去"] },
+          { name:"利用閣", desc:"馬刺し老舖・生馬肉必吃", img:IMG.sushi1, maps:"利用閣 熊本 馬刺し", tags:["台灣推薦","攻略必去"] },
+          { name:"馬肉握壽司", desc:"熊本特產・新鮮馬肉握壽司", img:IMG.sushi2, maps:"馬肉寿司 熊本", tags:["台灣推薦"] },
+          { name:"太平燕（五郎八）", desc:"春雨什錦湯麵・熊本早餐文化", img:IMG.udon2, maps:"五郎八 太平燕 熊本", tags:["攻略必去"] },
         ]
       },
       {
@@ -503,49 +616,49 @@ const days = [
   {
     title: "熊本 → 返福岡",
     sub: "北九州 Pass 第3日 · 熊本城 · 天神地下街",
-    img: P('1590559899731-a382839e5549'),
+    img: IMG.day4,
     slots: [
       {
         type:"morning", emoji:"☀️", label:"早餐",
         title: "太平燕 · 熊本晨食名物",
         spots: [
-          { name:"五郎八", desc:"太平燕老舖・熊本早餐文化", emoji:"🍜", maps:"五郎八 太平燕 熊本", tags:["攻略必去"] },
+          { name:"五郎八", desc:"太平燕老舖・熊本早餐文化", img:IMG.udon2, maps:"五郎八 太平燕 熊本", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"太平燕（五郎八）", desc:"春雨什錦湯麵・早餐版", emoji:"🍜", maps:"五郎八 太平燕 熊本", tags:["攻略必去","台灣推薦"] },
-          { name:"熊本城ホテル朝食", desc:"日式和食早膳・城下町景觀", emoji:"🍚", maps:"ホテル熊本 朝食", tags:["攻略必去"] },
-          { name:"コムラード", desc:"熊本在地咖啡廳早餐", img:COFFEE, maps:"コムラード 熊本 カフェ", tags:["IG熱點"] },
+          { name:"太平燕（五郎八）", desc:"春雨什錦湯麵・早餐版", img:IMG.udon1, maps:"五郎八 太平燕 熊本", tags:["攻略必去","台灣推薦"] },
+          { name:"熊本城ホテル朝食", desc:"日式和食早膳・城下町景觀", img:IMG.breakfast, maps:"ホテル熊本 朝食", tags:["攻略必去"] },
+          { name:"コムラード", desc:"熊本在地咖啡廳早餐", img:IMG.coffee4, maps:"コムラード 熊本 カフェ", tags:["IG熱點"] },
         ]
       },
       {
         type:"day", emoji:"🌤️", label:"上午/下午",
         title: "熊本精華 → 新幹線返福岡",
         spots: [
-          { name:"熊本熊廣場", desc:"熊本熊打卡聖地・每日表演", emoji:"🐻", maps:"くまモンスクエア 熊本", tags:["攻略必去","IG熱點"] },
-          { name:"水前寺成趣園", desc:"江戶時代大名庭園・東海道縮景", img:P('1528360983277-13d401cdc186'), maps:"水前寺成趣園 熊本", tags:["攻略必去"] },
-          { name:"熊本城天守閣", desc:"完全復原・白鷺城之美", img:P('1590559899731-a382839e5549'), maps:"熊本城 天守閣", tags:["攻略必去"] },
-          { name:"天神地下街", desc:"返回福岡・地下商店街逛街", img:P('1528360983277-13d401cdc186'), maps:"天神地下街 福岡", tags:["攻略必去"] },
+          { name:"熊本熊廣場", desc:"熊本熊打卡聖地・每日表演", img:IMG.kumamon, maps:"くまモンスクエア 熊本", tags:["攻略必去","IG熱點"] },
+          { name:"水前寺成趣園", desc:"江戶時代大名庭園・東海道縮景", img:IMG.suizenji, maps:"水前寺成趣園 熊本", tags:["攻略必去"] },
+          { name:"熊本城天守閣", desc:"完全復原・白鷺城之美", img:IMG.kumamotoCastle, maps:"熊本城 天守閣", tags:["攻略必去"] },
+          { name:"天神地下街", desc:"返回福岡・地下商店街逛街", img:IMG.tenjin, maps:"天神地下街 福岡", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"馬刺し定食", desc:"生馬肉・熊本最著名特產", emoji:"🐴", maps:"馬刺し 熊本 定食", tags:["台灣推薦","攻略必去"] },
-          { name:"からし蓮根", desc:"芥末蓮藕・熊本限定土產", emoji:"🥗", maps:"からし蓮根 熊本", tags:["攻略必去"] },
-          { name:"熊本ラーメン 桂花", desc:"にんにく系豚骨・太麵", img:RAMEN, maps:"桂花ラーメン 熊本", tags:["攻略必去","Tabelog 3.50"] },
-          { name:"いきなり団子", desc:"さつまいも包あんこ・熊本和菓子", emoji:"🍡", maps:"いきなり団子 熊本", tags:["攻略必去"] },
+          { name:"馬刺し定食", desc:"生馬肉・熊本最著名特產", img:IMG.sushi1, maps:"馬刺し 熊本 定食", tags:["台灣推薦","攻略必去"] },
+          { name:"からし蓮根", desc:"芥末蓮藕・熊本限定土產", img:IMG.wagashi, maps:"からし蓮根 熊本", tags:["攻略必去"] },
+          { name:"熊本ラーメン 桂花", desc:"にんにく系豚骨・太麵", img:IMG.ramen2, maps:"桂花ラーメン 熊本", tags:["攻略必去","Tabelog 3.50"] },
+          { name:"いきなり団子", desc:"さつまいも包あんこ・熊本和菓子", img:IMG.sweet1, maps:"いきなり団子 熊本", tags:["攻略必去"] },
         ]
       },
       {
         type:"night", emoji:"🌙", label:"晚餐",
         title: "返福岡 · 天神拉麵戰",
         spots: [
-          { name:"天神 PARCO 周邊", desc:"天神核心商圈・夜間逛街", img:P('1542051841857-5f90071e7989'), maps:"天神パルコ 福岡", tags:["攻略必去"] },
+          { name:"天神 PARCO 周邊", desc:"天神核心商圈・夜間逛街", img:IMG.tenjin, maps:"天神パルコ 福岡", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"麵屋兼虎 天神本店", desc:"Tabelog 百名店・濃厚沾麵", img:RAMEN, maps:"麺屋兼虎天神本店", tags:["台灣推薦","Tabelog 3.72"] },
-          { name:"博多拉麵 ShinShin", desc:"清爽豚骨・在地人最愛", img:RAMEN, maps:"博多らーめんShinShin天神本店", tags:["台灣推薦","Tabelog 3.58"] },
-          { name:"一蘭拉麵 天神店", desc:"獨立隔間・24H 供應", img:RAMEN, maps:"一蘭ラーメン天神", tags:["台灣推薦"] },
-          { name:"天麩羅処ひらお", desc:"炸蝦天婦羅・排隊名店", emoji:"🍤", maps:"天ぷら処ひらお 天神", tags:["攻略必去","台灣推薦"] },
-          { name:"博多 新風", desc:"清湯豚骨・温和口味", img:RAMEN, maps:"博多新風ラーメン", tags:["攻略必去"] },
-          { name:"博多華味鳥", desc:"水炊き白湯鍋", emoji:"🍲", maps:"博多華味鳥 天神", tags:["台灣推薦","攻略必去"] },
+          { name:"麵屋兼虎 天神本店", desc:"Tabelog 百名店・濃厚沾麵", img:IMG.ramen3, maps:"麺屋兼虎天神本店", tags:["台灣推薦","Tabelog 3.72"] },
+          { name:"博多拉麵 ShinShin", desc:"清爽豚骨・在地人最愛", img:IMG.ramen2, maps:"博多らーめんShinShin天神本店", tags:["台灣推薦","Tabelog 3.58"] },
+          { name:"一蘭拉麵 天神店", desc:"獨立隔間・24H 供應", img:IMG.ramen1, maps:"一蘭ラーメン天神", tags:["台灣推薦"] },
+          { name:"天麩羅処ひらお", desc:"炸蝦天婦羅・排隊名店", img:IMG.tempura, maps:"天ぷら処ひらお 天神", tags:["攻略必去","台灣推薦"] },
+          { name:"博多 新風", desc:"清湯豚骨・温和口味", img:IMG.ramen4, maps:"博多新風ラーメン", tags:["攻略必去"] },
+          { name:"博多華味鳥", desc:"水炊き白湯鍋", img:IMG.hotpot, maps:"博多華味鳥 天神", tags:["台灣推薦","攻略必去"] },
         ]
       },
       {
@@ -565,50 +678,50 @@ const days = [
   {
     title: "由布院",
     sub: "北九州 Pass 第4日 · 金鱗湖朝霧 · 溫泉旅館",
-    img: P('1580822184713-fc5400e7fe10'),
+    img: IMG.day5,
     slots: [
       {
         type:"morning", emoji:"☀️", label:"早餐",
         title: "金鱗湖畔早餐咖啡",
         spots: [
-          { name:"金鱗湖 早晨朝霧", desc:"秋冬 5:00~8:00 最美・幻想晨霧", img:P('1580822184713-fc5400e7fe10'), maps:"金鱗湖 由布院", tags:["IG熱點","攻略必去"] },
+          { name:"金鱗湖 早晨朝霧", desc:"秋冬 5:00~8:00 最美・幻想晨霧", img:IMG.kinrinMist, maps:"金鱗湖 由布院", tags:["IG熱點","攻略必去"] },
         ],
         foods: [
-          { name:"茶房 天井桟敷", desc:"亀の井別荘・江戶造り酒屋改建・9:00", img:COFFEE, maps:"茶房天井棧敷 由布院", tags:["攻略必去","Tabelog 3.55"] },
-          { name:"カフェ ラ リューシュ", desc:"金鱗湖畔・湖面望景・自家焙煎", img:COFFEE, maps:"カフェラリューシュ 由布院", tags:["IG熱點","攻略必去"] },
-          { name:"Cafe Duo", desc:"3D 拉花・由布岳景觀", img:COFFEE, maps:"Cafe Duo 由布院", tags:["IG熱點"] },
-          { name:"ゆふふ 由布院駅前", desc:"由布院産プリン 350 円", img:SWEET, maps:"ゆふふ 由布院", tags:["台灣推薦"] },
-          { name:"由布院ノスタルジー", desc:"洋館咖啡廳・復古早餐", img:COFFEE, maps:"由布院ノスタルジー カフェ", tags:["IG熱點"] },
+          { name:"茶房 天井桟敷", desc:"亀の井別荘・江戶造り酒屋改建・9:00", img:IMG.coffee2, maps:"茶房天井棧敷 由布院", tags:["攻略必去","Tabelog 3.55"] },
+          { name:"カフェ ラ リューシュ", desc:"金鱗湖畔・湖面望景・自家焙煎", img:IMG.coffee3, maps:"カフェラリューシュ 由布院", tags:["IG熱點","攻略必去"] },
+          { name:"Cafe Duo", desc:"3D 拉花・由布岳景觀", img:IMG.coffee4, maps:"Cafe Duo 由布院", tags:["IG熱點"] },
+          { name:"ゆふふ 由布院駅前", desc:"由布院産プリン 350 円", img:IMG.sweet1, maps:"ゆふふ 由布院", tags:["台灣推薦"] },
+          { name:"由布院ノスタルジー", desc:"洋館咖啡廳・復古早餐", img:IMG.coffee1, maps:"由布院ノスタルジー カフェ", tags:["IG熱點"] },
         ]
       },
       {
         type:"day", emoji:"🌤️", label:"上午/下午",
         title: "由布院之森 → 金鱗湖 → 湯之坪街道",
         spots: [
-          { name:"由布院之森列車", desc:"觀光列車・博多出發需預訂", img:P('1553530979-212c53e7d74c'), maps:"ゆふいんの森 列車", tags:["攻略必去","IG熱點"] },
-          { name:"金鱗湖", desc:"由布院象徵・秋冬晨霧最美", img:P('1580822184713-fc5400e7fe10'), maps:"金鱗湖 由布院", tags:["攻略必去","IG熱點"] },
-          { name:"湯之坪街道", desc:"特色小店・甜點・雜貨林立", img:P('1580822184713-fc5400e7fe10'), maps:"湯の坪街道 由布院", tags:["攻略必去"] },
-          { name:"ガラスの森", desc:"玻璃美術館・藝術品展示", emoji:"🪟", maps:"由布院 ガラスの森", tags:["IG熱點"] },
-          { name:"由布岳眺望點", desc:"由布院象徵山岳・田園景色", img:P('1580822184713-fc5400e7fe10'), maps:"由布岳 展望台", tags:["IG熱點"] },
+          { name:"由布院之森列車", desc:"觀光列車・博多出發需預訂", img:IMG.yufuinTrain, maps:"ゆふいんの森 列車", tags:["攻略必去","IG熱點"] },
+          { name:"金鱗湖", desc:"由布院象徵・秋冬晨霧最美", img:IMG.kinrinLake, maps:"金鱗湖 由布院", tags:["攻略必去","IG熱點"] },
+          { name:"湯之坪街道", desc:"特色小店・甜點・雜貨林立", img:IMG.yufuinStreet, maps:"湯の坪街道 由布院", tags:["攻略必去"] },
+          { name:"ガラスの森", desc:"玻璃美術館・藝術品展示", img:IMG.yufuinOnsen, maps:"由布院 ガラスの森", tags:["IG熱點"] },
+          { name:"由布岳眺望點", desc:"由布院象徵山岳・田園景色", img:IMG.kinrinMist, maps:"由布岳 展望台", tags:["IG熱點"] },
         ],
         foods: [
-          { name:"飛驒牛可樂餅", desc:"湯之坪街道・邊走邊吃名物", emoji:"🥩", maps:"飛騨牛コロッケ 湯布院", tags:["台灣推薦","攻略必去"] },
-          { name:"銀の彩 くりーむ棒", desc:"250円・常午前完售", img:SWEET, maps:"銀の彩 由布院", tags:["台灣推薦","攻略必去"] },
-          { name:"溫泉饅頭 各家", desc:"剛蒸好・街道必吃點心", emoji:"🍡", maps:"温泉まんじゅう 由布院", tags:["攻略必去"] },
-          { name:"山椒魚漢堡 B-speak", desc:"由布院ロールケーキ老舖限定漢堡", img:BURGER, maps:"B-speak 由布院", tags:["IG熱點","台灣推薦"] },
-          { name:"ジェラート 各家", desc:"由布院義式冰淇淋小店", emoji:"🍦", maps:"ジェラート 由布院 湯の坪", tags:["IG熱點"] },
+          { name:"飛驒牛可樂餅", desc:"湯之坪街道・邊走邊吃名物", img:IMG.curry, maps:"飛騨牛コロッケ 湯布院", tags:["台灣推薦","攻略必去"] },
+          { name:"銀の彩 くりーむ棒", desc:"250円・常午前完售", img:IMG.sweet2, maps:"銀の彩 由布院", tags:["台灣推薦","攻略必去"] },
+          { name:"溫泉饅頭 各家", desc:"剛蒸好・街道必吃點心", img:IMG.wagashi, maps:"温泉まんじゅう 由布院", tags:["攻略必去"] },
+          { name:"山椒魚漢堡 B-speak", desc:"由布院ロールケーキ老舖限定漢堡", img:IMG.burger2, maps:"B-speak 由布院", tags:["IG熱點","台灣推薦"] },
+          { name:"ジェラート 各家", desc:"由布院義式冰淇淋小店", img:IMG.sweet3, maps:"ジェラート 由布院 湯の坪", tags:["IG熱點"] },
         ]
       },
       {
         type:"night", emoji:"🌙", label:"晚餐",
         title: "溫泉旅館 懷石料理",
         spots: [
-          { name:"由布院溫泉旅館", desc:"一泊二食・私人露天風呂", img:P('1580822184713-fc5400e7fe10'), maps:"由布院 温泉旅館", tags:["攻略必去"] },
+          { name:"由布院溫泉旅館", desc:"一泊二食・私人露天風呂", img:IMG.yufuinOnsen, maps:"由布院 温泉旅館", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"旅館懷石料理", desc:"10道以上精緻和食・季節食材", emoji:"🍱", maps:"由布院 旅館 懐石料理", tags:["攻略必去"] },
-          { name:"大分 地酒", desc:"旅館自選清酒・麥焼酎", emoji:"🍶", maps:"大分地酒 由布院", tags:["攻略必去"] },
-          { name:"關アジ・關サバ", desc:"大分名物關鯖・鮮度超群", img:SUSHI, maps:"関アジ 関サバ 大分", tags:["攻略必去"] },
+          { name:"旅館懷石料理", desc:"10道以上精緻和食・季節食材", img:IMG.seafood2, maps:"由布院 旅館 懐石料理", tags:["攻略必去"] },
+          { name:"大分 地酒", desc:"旅館自選清酒・麥焼酎", img:IMG.onsenFood, maps:"大分地酒 由布院", tags:["攻略必去"] },
+          { name:"關アジ・關サバ", desc:"大分名物關鯖・鮮度超群", img:IMG.sushi2, maps:"関アジ 関サバ 大分", tags:["攻略必去"] },
         ]
       },
       {
@@ -628,45 +741,45 @@ const days = [
   {
     title: "別府 → 返福岡",
     sub: "北九州 Pass 第5日 · 地獄巡禮 · 溫泉布丁",
-    img: P('1553361371-9b22f78e8b1d'),
+    img: IMG.day6,
     slots: [
       {
         type:"morning", emoji:"☀️", label:"早餐",
         title: "溫泉旅館日式早膳",
         spots: [
-          { name:"旅館早湯", desc:"晨間私人露天風呂・出發前泡湯", img:P('1553361371-9b22f78e8b1d'), maps:"由布院 旅館", tags:["攻略必去"] },
+          { name:"旅館早湯", desc:"晨間私人露天風呂・出發前泡湯", img:IMG.yufuinOnsen, maps:"由布院 旅館", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"旅館日式和食早膳", desc:"白飯・味噌汁・漬物・附早湯", emoji:"🍚", maps:"由布院 旅館朝食", tags:["攻略必去"] },
+          { name:"旅館日式和食早膳", desc:"白飯・味噌汁・漬物・附早湯", img:IMG.breakfast, maps:"由布院 旅館朝食", tags:["攻略必去"] },
         ]
       },
       {
         type:"day", emoji:"🌤️", label:"上午/下午",
         title: "別府八大地獄巡禮",
         spots: [
-          { name:"海地獄", desc:"鈷藍色溫泉・98度高溫", img:P('1553361371-9b22f78e8b1d'), maps:"海地獄 別府", tags:["攻略必去","IG熱點"] },
-          { name:"血の池地獄", desc:"血紅色・日本最古天然地獄", img:P('1553361371-9b22f78e8b1d'), maps:"血の池地獄 別府", tags:["攻略必去","IG熱點"] },
-          { name:"龍巻地獄", desc:"間歇噴泉・每30分噴一次", img:P('1553361371-9b22f78e8b1d'), maps:"龍巻地獄 別府", tags:["攻略必去"] },
-          { name:"白池地獄", desc:"藍白色溫泉・熱帶魚展示", img:P('1553361371-9b22f78e8b1d'), maps:"白池地獄 別府", tags:["攻略必去"] },
+          { name:"海地獄", desc:"鈷藍色溫泉・98度高溫", img:IMG.umiJigoku, maps:"海地獄 別府", tags:["攻略必去","IG熱點"] },
+          { name:"血の池地獄", desc:"血紅色・日本最古天然地獄", img:IMG.chiJigoku, maps:"血の池地獄 別府", tags:["攻略必去","IG熱點"] },
+          { name:"龍巻地獄", desc:"間歇噴泉・每30分噴一次", img:IMG.tatsumakiJigoku, maps:"龍巻地獄 別府", tags:["攻略必去"] },
+          { name:"白池地獄", desc:"藍白色溫泉・熱帶魚展示", img:IMG.shiraikeJigoku, maps:"白池地獄 別府", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"地獄蒸玉米＋溫泉蛋", desc:"蒸氣料理・別府必吃體驗", emoji:"🥚", maps:"地獄蒸し工房 鉄輪 別府", tags:["台灣推薦","攻略必去"] },
-          { name:"地獄蒸海鮮", desc:"蒸氣烹調・甜味鎖住", img:SEAFOOD, maps:"地獄蒸し 別府 海鮮", tags:["攻略必去"] },
-          { name:"別府 とり天", desc:"大分名物炸雞天婦羅", emoji:"🍗", maps:"とり天 別府 大分", tags:["台灣推薦","攻略必去"] },
-          { name:"岡本屋売店 溫泉布丁", desc:"地獄蒸・焦糖濃厚・排隊必買", img:SWEET, maps:"岡本屋売店 別府", tags:["台灣推薦","攻略必去","IG熱點"] },
+          { name:"地獄蒸玉米＋溫泉蛋", desc:"蒸氣料理・別府必吃體驗", img:IMG.onsenFood, maps:"地獄蒸し工房 鉄輪 別府", tags:["台灣推薦","攻略必去"] },
+          { name:"地獄蒸海鮮", desc:"蒸氣烹調・甜味鎖住", img:IMG.seafood1, maps:"地獄蒸し 別府 海鮮", tags:["攻略必去"] },
+          { name:"別府 とり天", desc:"大分名物炸雞天婦羅", img:IMG.tempura, maps:"とり天 別府 大分", tags:["台灣推薦","攻略必去"] },
+          { name:"岡本屋売店 溫泉布丁", desc:"地獄蒸・焦糖濃厚・排隊必買", img:IMG.sweet1, maps:"岡本屋売店 別府", tags:["台灣推薦","攻略必去","IG熱點"] },
         ]
       },
       {
         type:"night", emoji:"🌙", label:"晚餐",
         title: "別府名物 → 返回福岡",
         spots: [
-          { name:"別府タワー", desc:"昭和時代地標・夜間亮燈", emoji:"🗼", maps:"別府タワー 夜景", tags:["IG熱點"] },
+          { name:"別府タワー", desc:"昭和時代地標・夜間亮燈", img:IMG.beppuTower, maps:"別府タワー 夜景", tags:["IG熱點"] },
         ],
         foods: [
-          { name:"とよ常 別府冷麵", desc:"元祖・在地風格特殊口感", emoji:"🍜", maps:"とよ常 別府冷麺", tags:["攻略必去"] },
-          { name:"ひょうたん温泉 食事処", desc:"地獄蒸套餐・溫泉設施附設", emoji:"♨️", maps:"ひょうたん温泉 別府", tags:["攻略必去"] },
-          { name:"別府ぷくぷく", desc:"大分とり天・在地居酒屋", emoji:"🍗", maps:"別府ぷくぷく 別府居酒屋", tags:["攻略必去"] },
-          { name:"豊後水道 海鮮丼", desc:"大分縣直送海鮮・鮮度頂級", img:SEAFOOD, maps:"豊後水道 海鮮丼 別府", tags:["攻略必去"] },
+          { name:"とよ常 別府冷麵", desc:"元祖・在地風格特殊口感", img:IMG.udon1, maps:"とよ常 別府冷麺", tags:["攻略必去"] },
+          { name:"ひょうたん温泉 食事処", desc:"地獄蒸套餐・溫泉設施附設", img:IMG.onsenFood, maps:"ひょうたん温泉 別府", tags:["攻略必去"] },
+          { name:"別府ぷくぷく", desc:"大分とり天・在地居酒屋", img:IMG.yakitori, maps:"別府ぷくぷく 別府居酒屋", tags:["攻略必去"] },
+          { name:"豊後水道 海鮮丼", desc:"大分縣直送海鮮・鮮度頂級", img:IMG.seafood3, maps:"豊後水道 海鮮丼 別府", tags:["攻略必去"] },
         ]
       },
       {
@@ -686,49 +799,49 @@ const days = [
   {
     title: "門司港 + 下關",
     sub: "大正浪漫懷舊區 · 關門海峽 · 河豚料理",
-    img: P('1555400038-63f5ba517a47'),
+    img: IMG.day7,
     slots: [
       {
         type:"morning", emoji:"☀️", label:"早餐",
         title: "ROUND COUNTER 文青早餐",
         spots: [
-          { name:"ROUND COUNTER", desc:"ダブルエッグトースト・REC COFFEE 精品", img:COFFEE, maps:"ROUND COUNTER 福岡", tags:["IG熱點","攻略必去"] },
+          { name:"ROUND COUNTER", desc:"ダブルエッグトースト・REC COFFEE 精品", img:IMG.coffee4, maps:"ROUND COUNTER 福岡", tags:["IG熱點","攻略必去"] },
         ],
         foods: [
-          { name:"ROUND COUNTER", desc:"ダブルエッグトースト・圓形吧台", img:COFFEE, maps:"ROUND COUNTER 福岡", tags:["IG熱點","攻略必去"] },
-          { name:"JWTカフェ", desc:"北歐風・フレンチトースト・8:00開", img:COFFEE, maps:"JWTカフェ 福岡天神", tags:["IG熱點"] },
-          { name:"白金茶房", desc:"一軒家パンケーキ・早起必訪", img:PANCAKE, maps:"白金茶房 福岡", tags:["IG熱點"] },
+          { name:"ROUND COUNTER", desc:"ダブルエッグトースト・圓形吧台", img:IMG.coffee4, maps:"ROUND COUNTER 福岡", tags:["IG熱點","攻略必去"] },
+          { name:"JWTカフェ", desc:"北歐風・フレンチトースト・8:00開", img:IMG.pancake2, maps:"JWTカフェ 福岡天神", tags:["IG熱點"] },
+          { name:"白金茶房", desc:"一軒家パンケーキ・早起必訪", img:IMG.pancake1, maps:"白金茶房 福岡", tags:["IG熱點"] },
         ]
       },
       {
         type:"day", emoji:"🌤️", label:"上午/下午",
         title: "門司港 → 渡船 → 下關",
         spots: [
-          { name:"門司港懷舊區", desc:"大正浪漫西洋建築群・復古街景", img:P('1555400038-63f5ba517a47'), maps:"門司港レトロ", tags:["攻略必去","IG熱點"] },
-          { name:"舊門司稅關", desc:"1912年建造・紅磚建築", img:P('1555400038-63f5ba517a47'), maps:"旧門司税関", tags:["攻略必去"] },
-          { name:"關門大橋・關門海峽", desc:"九州本州分界・渡船 5 分鐘", img:P('1555400038-63f5ba517a47'), maps:"関門海峡 渡し船", tags:["攻略必去","IG熱點"] },
-          { name:"下關唐戶市場", desc:"週末屋台市場・河豚海膽", img:SEAFOOD, maps:"唐戸市場 下関", tags:["攻略必去","台灣推薦"] },
-          { name:"小倉城", desc:"順遊・北九州名城", img:P('1519451241324-20b4ea2c4220'), maps:"小倉城 北九州", tags:["攻略必去"] },
+          { name:"門司港懷舊區", desc:"大正浪漫西洋建築群・復古街景", img:IMG.mojikoRetro, maps:"門司港レトロ", tags:["攻略必去","IG熱點"] },
+          { name:"舊門司稅關", desc:"1912年建造・紅磚建築", img:IMG.mojikoCustoms, maps:"旧門司税関", tags:["攻略必去"] },
+          { name:"關門大橋・關門海峽", desc:"九州本州分界・渡船 5 分鐘", img:IMG.kanmonStrait, maps:"関門海峡 渡し船", tags:["攻略必去","IG熱點"] },
+          { name:"下關唐戶市場", desc:"週末屋台市場・河豚海膽", img:IMG.karatoMarket, maps:"唐戸市場 下関", tags:["攻略必去","台灣推薦"] },
+          { name:"小倉城", desc:"順遊・北九州名城", img:IMG.kokuraCastle, maps:"小倉城 北九州", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"門司港燒咖哩（伽哩本舗）", desc:"地區名物始祖・深皿焼きカレー", emoji:"🍛", maps:"伽哩本舗 門司港", tags:["台灣推薦","攻略必去"] },
-          { name:"BEAR FRUITS 燒咖哩", desc:"門司港人氣咖哩・排隊必吃", emoji:"🍛", maps:"BEAR FRUITS 門司港", tags:["攻略必去"] },
-          { name:"唐戶市場 海鮮丼", desc:"週末屋台・河豚・海膽・鮭卵", img:SEAFOOD, maps:"唐戸市場 海鮮丼 下関", tags:["台灣推薦","攻略必去"] },
-          { name:"春帆楼 河豚料理", desc:"1888年獲准・河豚料理元祖", emoji:"🐡", maps:"春帆楼 下関 ふぐ料理", tags:["攻略必去","Tabelog 3.60"] },
-          { name:"下關唐戶 河豚刺身", desc:"鮮度頂級・唐戶市場直購", emoji:"🐡", maps:"ふく刺し 唐戸市場 下関", tags:["台灣推薦"] },
+          { name:"門司港燒咖哩（伽哩本舗）", desc:"地區名物始祖・深皿焼きカレー", img:IMG.curry, maps:"伽哩本舗 門司港", tags:["台灣推薦","攻略必去"] },
+          { name:"BEAR FRUITS 燒咖哩", desc:"門司港人氣咖哩・排隊必吃", img:IMG.curry, maps:"BEAR FRUITS 門司港", tags:["攻略必去"] },
+          { name:"唐戶市場 海鮮丼", desc:"週末屋台・河豚・海膽・鮭卵", img:IMG.seafood2, maps:"唐戸市場 海鮮丼 下関", tags:["台灣推薦","攻略必去"] },
+          { name:"春帆楼 河豚料理", desc:"1888年獲准・河豚料理元祖", img:IMG.seafood3, maps:"春帆楼 下関 ふぐ料理", tags:["攻略必去","Tabelog 3.60"] },
+          { name:"下關唐戶 河豚刺身", desc:"鮮度頂級・唐戶市場直購", img:IMG.sushi1, maps:"ふく刺し 唐戸市場 下関", tags:["台灣推薦"] },
         ]
       },
       {
         type:"night", emoji:"🌙", label:"晚餐",
         title: "返回福岡 · もつ鍋夜",
         spots: [
-          { name:"博多中洲橋畔", desc:"夜間河岸散步・霓虹倒影", img:P('1542051841857-5f90071e7989'), maps:"中洲 那珂川 夜景 福岡", tags:["IG熱點"] },
+          { name:"博多中洲橋畔", desc:"夜間河岸散步・霓虹倒影", img:IMG.nakasuYatai, maps:"中洲 那珂川 夜景 福岡", tags:["IG熱點"] },
         ],
         foods: [
-          { name:"もつ鍋 一慶", desc:"もつ鍋・博多特色内臓火鍋", emoji:"🍲", maps:"もつ鍋一慶 博多", tags:["攻略必去","台灣推薦"] },
-          { name:"もつ鍋 楽天地", desc:"もつ鍋元祖・博多老舖", emoji:"🍲", maps:"もつ鍋楽天地 博多", tags:["攻略必去","Tabelog 3.58"] },
-          { name:"博多水炊き（華味鳥）", desc:"白湯雞肉鍋・博多名物", emoji:"🍲", maps:"博多華味鳥 福岡", tags:["台灣推薦","攻略必去"] },
-          { name:"博多 明太子居酒屋", desc:"明太子料理全餐・各種吃法", img:MENTA, maps:"明太子 居酒屋 博多", tags:["攻略必去"] },
+          { name:"もつ鍋 一慶", desc:"もつ鍋・博多特色内臓火鍋", img:IMG.hotpot, maps:"もつ鍋一慶 博多", tags:["攻略必去","台灣推薦"] },
+          { name:"もつ鍋 楽天地", desc:"もつ鍋元祖・博多老舖", img:IMG.hotpot, maps:"もつ鍋楽天地 博多", tags:["攻略必去","Tabelog 3.58"] },
+          { name:"博多水炊き（華味鳥）", desc:"白湯雞肉鍋・博多名物", img:IMG.hotpot, maps:"博多華味鳥 福岡", tags:["台灣推薦","攻略必去"] },
+          { name:"博多 明太子居酒屋", desc:"明太子料理全餐・各種吃法", img:IMG.menta1, maps:"明太子 居酒屋 博多", tags:["攻略必去"] },
         ]
       },
       {
@@ -749,49 +862,49 @@ const days = [
   {
     title: "太宰府 + 柳川 + 宮地嶽神社",
     sub: "學問之神 · 九州威尼斯 · 光之道（2月/10月限定）",
-    img: P('1519451241324-20b4ea2c4220'),
+    img: IMG.day8,
     slots: [
       {
         type:"morning", emoji:"☀️", label:"早餐",
         title: "白金茶房 一軒家パンケーキ",
         spots: [
-          { name:"白金茶房", desc:"築60年邸宅改建・8:00開・早起必排", img:PANCAKE, maps:"白金茶房 福岡", tags:["IG熱點","攻略必去"] },
+          { name:"白金茶房", desc:"築60年邸宅改建・8:00開・早起必排", img:IMG.pancake1, maps:"白金茶房 福岡", tags:["IG熱點","攻略必去"] },
         ],
         foods: [
-          { name:"白金茶房 季節鬆餅", desc:"福岡縣産小麥 100%・1,760 円", img:PANCAKE, maps:"白金茶房 福岡", tags:["IG熱點","攻略必去"] },
-          { name:"soel 古民家早餐", desc:"自製フォカッチャ・旬野菜套餐", img:COFFEE, maps:"soel カフェ 福岡", tags:["IG熱點"] },
-          { name:"gelato pique cafe", desc:"2026.1開幕・ピケベアクレープ", img:PANCAKE, maps:"gelato pique cafe ソラリアプラザ 天神", tags:["IG熱點"] },
+          { name:"白金茶房 季節鬆餅", desc:"福岡縣産小麥 100%・1,760 円", img:IMG.pancake1, maps:"白金茶房 福岡", tags:["IG熱點","攻略必去"] },
+          { name:"soel 古民家早餐", desc:"自製フォカッチャ・旬野菜套餐", img:IMG.coffee3, maps:"soel カフェ 福岡", tags:["IG熱點"] },
+          { name:"gelato pique cafe", desc:"2026.1開幕・ピケベアクレープ", img:IMG.pancake3, maps:"gelato pique cafe ソラリアプラザ 天神", tags:["IG熱點"] },
         ]
       },
       {
         type:"day", emoji:"🌤️", label:"上午/下午",
         title: "太宰府 → 柳川",
         spots: [
-          { name:"太宰府天滿宮", desc:"學業祈願・學問之神・梅花名所", img:P('1519451241324-20b4ea2c4220'), maps:"太宰府天満宮", tags:["攻略必去","台灣推薦"] },
-          { name:"隈研吾設計 STARBUCKS", desc:"木組格柵建築・IG 必打卡", img:P('1519451241324-20b4ea2c4220'), maps:"スターバックス太宰府天満宮表参道店", tags:["IG熱點","攻略必去"] },
-          { name:"寶滿宮竈門神社", desc:"戀愛祈願聖地・粉紅御守", img:P('1519451241324-20b4ea2c4220'), maps:"宝満宮竈門神社 太宰府", tags:["IG熱點","攻略必去"] },
-          { name:"柳川遊船", desc:"九州威尼斯・垂柳水道・約70分", img:P('1528360983277-13d401cdc186'), maps:"柳川 川下り", tags:["攻略必去","台灣推薦","IG熱點"] },
-          { name:"御花松濤園", desc:"舊藩主別邸・日本遺産庭園", img:P('1528360983277-13d401cdc186'), maps:"御花松濤園 柳川", tags:["攻略必去"] },
+          { name:"太宰府天滿宮", desc:"學業祈願・學問之神・梅花名所", img:IMG.dazaifu, maps:"太宰府天満宮", tags:["攻略必去","台灣推薦"] },
+          { name:"隈研吾設計 STARBUCKS", desc:"木組格柵建築・IG 必打卡", img:IMG.dazaifuStarbucks, maps:"スターバックス太宰府天満宮表参道店", tags:["IG熱點","攻略必去"] },
+          { name:"寶滿宮竈門神社", desc:"戀愛祈願聖地・粉紅御守", img:IMG.kamado, maps:"宝満宮竈門神社 太宰府", tags:["IG熱點","攻略必去"] },
+          { name:"柳川遊船", desc:"九州威尼斯・垂柳水道・約70分", img:IMG.yanagawaBoat, maps:"柳川 川下り", tags:["攻略必去","台灣推薦","IG熱點"] },
+          { name:"御花松濤園", desc:"舊藩主別邸・日本遺産庭園", img:IMG.yanagawaGarden, maps:"御花松濤園 柳川", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"梅枝餅", desc:"太宰府表參道手燒・學問加持", emoji:"🍡", maps:"梅ヶ枝餅 太宰府 表参道", tags:["台灣推薦","攻略必去"] },
-          { name:"一蘭 太宰府 合格拉麵", desc:"太宰府限定・祈願合格豚骨", img:RAMEN, maps:"一蘭ラーメン 太宰府", tags:["台灣推薦"] },
-          { name:"柳川鰻魚飯（むつごろう屋）", desc:"蒸籠鰻魚飯・柳川名物", img:UNAJU, maps:"むつごろう屋 柳川 鰻", tags:["台灣推薦","攻略必去"] },
-          { name:"若松屋 鰻魚飯", desc:"柳川老舖・秘傳醬汁", img:UNAJU, maps:"若松屋 柳川 うなぎ", tags:["攻略必去"] },
-          { name:"元祖 本吉屋 鰻魚飯", desc:"1681年創業・日本最古鰻魚飯屋", img:UNAJU, maps:"本吉屋 柳川 蒸籠うなぎ", tags:["攻略必去","Tabelog 3.72"] },
+          { name:"梅枝餅", desc:"太宰府表參道手燒・學問加持", img:IMG.wagashi, maps:"梅ヶ枝餅 太宰府 表参道", tags:["台灣推薦","攻略必去"] },
+          { name:"一蘭 太宰府 合格拉麵", desc:"太宰府限定・祈願合格豚骨", img:IMG.ramen1, maps:"一蘭ラーメン 太宰府", tags:["台灣推薦"] },
+          { name:"柳川鰻魚飯（むつごろう屋）", desc:"蒸籠鰻魚飯・柳川名物", img:IMG.unaju1, maps:"むつごろう屋 柳川 鰻", tags:["台灣推薦","攻略必去"] },
+          { name:"若松屋 鰻魚飯", desc:"柳川老舖・秘傳醬汁", img:IMG.unaju2, maps:"若松屋 柳川 うなぎ", tags:["攻略必去"] },
+          { name:"元祖 本吉屋 鰻魚飯", desc:"1681年創業・日本最古鰻魚飯屋", img:IMG.unaju1, maps:"本吉屋 柳川 蒸籠うなぎ", tags:["攻略必去","Tabelog 3.72"] },
         ]
       },
       {
         type:"night", emoji:"🌙", label:"傍晚 · 宮地嶽神社",
         title: "🗓 宮地嶽神社「光之道」（2月/10月下旬限定）",
         spots: [
-          { name:"宮地嶽神社", desc:"光之道・每年2月下旬/10月下旬・夕陽沿800m參道形成黃金光道", img:P('1519451241324-20b4ea2c4220'), maps:"宮地嶽神社 福津市", tags:["IG熱點","攻略必去","🗓 季節限定"] },
-          { name:"宮地浜", desc:"神社前海灘・夕陽觀賞最佳點", img:P('1505118380757-91f5f5632de0'), maps:"宮地浜 福津", tags:["IG熱點"] },
+          { name:"宮地嶽神社", desc:"光之道・每年2月下旬/10月下旬・夕陽沿800m參道形成黃金光道", img:IMG.miyajidake, maps:"宮地嶽神社 福津市", tags:["IG熱點","攻略必去","🗓 季節限定"] },
+          { name:"宮地浜", desc:"神社前海灘・夕陽觀賞最佳點", img:IMG.miyajidakeBeach, maps:"宮地浜 福津", tags:["IG熱點"] },
         ],
         foods: [
-          { name:"天神 大砲拉麵", desc:"創業70年・久留米系老舖", img:RAMEN, maps:"大砲ラーメン天神店", tags:["攻略必去","Tabelog 3.55"] },
-          { name:"天神居酒屋 焼き鳥", desc:"焼き鳥＋清酒・天神下班情調", emoji:"🍢", maps:"焼き鳥 居酒屋 天神", tags:["攻略必去"] },
-          { name:"みのりカフェ 福岡パルコ", desc:"九州産野菜プレート・15時後通し", img:COFFEE, maps:"みのりカフェ 福岡パルコ", tags:["攻略必去"] },
+          { name:"天神 大砲拉麵", desc:"創業70年・久留米系老舖", img:IMG.ramen4, maps:"大砲ラーメン天神店", tags:["攻略必去","Tabelog 3.55"] },
+          { name:"天神居酒屋 焼き鳥", desc:"焼き鳥＋清酒・天神下班情調", img:IMG.yakitori, maps:"焼き鳥 居酒屋 天神", tags:["攻略必去"] },
+          { name:"みのりカフェ 福岡パルコ", desc:"九州産野菜プレート・15時後通し", img:IMG.coffee2, maps:"みのりカフェ 福岡パルコ", tags:["攻略必去"] },
         ]
       },
       {
@@ -811,50 +924,50 @@ const days = [
   {
     title: "糸島半島",
     sub: "棕櫚樹鞦韆 · 天使之翼 · 夫婦岩夕陽 · 海景咖啡",
-    img: P('1505118380757-91f5f5632de0'),
+    img: IMG.day9,
     slots: [
       {
         type:"morning", emoji:"☀️", label:"早餐",
         title: "糸島海景咖啡晨食",
         spots: [
-          { name:"PALM BEACH THE GARDENS", desc:"IG 人氣 No.1 海景咖啡・11:00開", img:P('1505118380757-91f5f5632de0'), maps:"PALM BEACH THE GARDENS 糸島", tags:["IG熱點","攻略必去"] },
+          { name:"PALM BEACH THE GARDENS", desc:"IG 人氣 No.1 海景咖啡・11:00開", img:IMG.itoshimaBeach, maps:"PALM BEACH THE GARDENS 糸島", tags:["IG熱點","攻略必去"] },
         ],
         foods: [
-          { name:"PALM BEACH THE GARDENS", desc:"沙灘海景・草皮座位・11:00開", img:P('1505118380757-91f5f5632de0'), maps:"PALM BEACH THE GARDENS 糸島", tags:["IG熱點","攻略必去"] },
-          { name:"LONDON BUS CAFE", desc:"英倫紅巴士咖啡・無敵海景", img:COFFEE, maps:"LONDON BUS CAFE 糸島", tags:["IG熱點","台灣推薦"] },
-          { name:"糸島 café de LIBERTE", desc:"海邊法式咖啡廳・早餐套餐", img:COFFEE, maps:"cafe de LIBERTE 糸島", tags:["IG熱點"] },
-          { name:"一蘭之森（糸島）", desc:"一蘭工廠・限定版拉麵＋海景", img:RAMEN, maps:"一蘭の森 糸島", tags:["台灣推薦","攻略必去"] },
+          { name:"PALM BEACH THE GARDENS", desc:"沙灘海景・草皮座位・11:00開", img:IMG.itoshimaBeach, maps:"PALM BEACH THE GARDENS 糸島", tags:["IG熱點","攻略必去"] },
+          { name:"LONDON BUS CAFE", desc:"英倫紅巴士咖啡・無敵海景", img:IMG.londonBus, maps:"LONDON BUS CAFE 糸島", tags:["IG熱點","台灣推薦"] },
+          { name:"糸島 café de LIBERTE", desc:"海邊法式咖啡廳・早餐套餐", img:IMG.coffee1, maps:"cafe de LIBERTE 糸島", tags:["IG熱點"] },
+          { name:"一蘭之森（糸島）", desc:"一蘭工廠・限定版拉麵＋海景", img:IMG.ramen2, maps:"一蘭の森 糸島", tags:["台灣推薦","攻略必去"] },
         ]
       },
       {
         type:"day", emoji:"🌤️", label:"上午/下午",
         title: "糸島 IG 打卡全攻略",
         spots: [
-          { name:"棕櫚樹鞦韆（PALM BEACH）", desc:"糸島最代表打卡・椰子樹鞦韆＋大海", img:P('1505118380757-91f5f5632de0'), maps:"やしの木ブランコ 糸島 PALM BEACH", tags:["IG熱點","攻略必去"] },
-          { name:"天使之翼（PALM BEACH）", desc:"白色翅膀打卡牆・年輕人最愛", img:P('1505118380757-91f5f5632de0'), maps:"天使の羽 糸島 PALM BEACH", tags:["IG熱點","攻略必去"] },
-          { name:"夫婦岩（桜井二見ヶ浦）", desc:"海中白色鳥居＋夕陽・日落百選", img:P('1505118380757-91f5f5632de0'), maps:"桜井二見ヶ浦 糸島 夫婦岩", tags:["IG熱點","攻略必去"] },
-          { name:"芥屋の大門", desc:"日本最大玄武岩洞窟・遊覽船（4~11月）", img:P('1505118380757-91f5f5632de0'), maps:"芥屋の大門 糸島", tags:["攻略必去","IG熱點"] },
-          { name:"白糸の滝", desc:"24m瀑布・夏季清涼・秋楓絕景", img:P('1505118380757-91f5f5632de0'), maps:"白糸の滝 糸島", tags:["IG熱點","攻略必去"] },
+          { name:"棕櫚樹鞦韆（PALM BEACH）", desc:"糸島最代表打卡・椰子樹鞦韆＋大海", img:IMG.palmSwing, maps:"やしの木ブランコ 糸島 PALM BEACH", tags:["IG熱點","攻略必去"] },
+          { name:"天使之翼（PALM BEACH）", desc:"白色翅膀打卡牆・年輕人最愛", img:IMG.angelWings, maps:"天使の羽 糸島 PALM BEACH", tags:["IG熱點","攻略必去"] },
+          { name:"夫婦岩（桜井二見ヶ浦）", desc:"海中白色鳥居＋夕陽・日落百選", img:IMG.futamigaura, maps:"桜井二見ヶ浦 糸島 夫婦岩", tags:["IG熱點","攻略必去"] },
+          { name:"芥屋の大門", desc:"日本最大玄武岩洞窟・遊覽船（4~11月）", img:IMG.keyaCave, maps:"芥屋の大門 糸島", tags:["攻略必去","IG熱點"] },
+          { name:"白糸の滝", desc:"24m瀑布・夏季清涼・秋楓絕景", img:IMG.shiraitoFall, maps:"白糸の滝 糸島", tags:["IG熱點","攻略必去"] },
         ],
         foods: [
-          { name:"糸島牡蠣小屋", desc:"11月~3月限定・炭火烤牡蠣", emoji:"🦪", maps:"牡蠣小屋 糸島 加布里", tags:["台灣推薦","攻略必去"] },
-          { name:"海膽丼（夏季限定）", desc:"夏季限定・需早排隊", emoji:"🍣", maps:"ウニ丼 糸島 夏", tags:["IG熱點","攻略必去"] },
-          { name:"志摩之四季市場", desc:"直賣所・新鮮海産・在地蔬菜", emoji:"🥗", maps:"志摩の四季市場 糸島", tags:["攻略必去"] },
-          { name:"一蘭之森 限定拉麵", desc:"工廠限定版・附海景用餐", img:RAMEN, maps:"一蘭の森 糸島", tags:["台灣推薦","IG熱點"] },
-          { name:"LONDON BUS CAFE 輕食", desc:"英倫巴士內用餐・打卡體驗", img:COFFEE, maps:"LONDON BUS CAFE 糸島", tags:["IG熱點"] },
-          { name:"糸島新鮮海鮮丼", desc:"漁港直送・當天最新鮮", img:SEAFOOD, maps:"海鮮丼 糸島 漁港", tags:["攻略必去"] },
+          { name:"糸島牡蠣小屋", desc:"11月~3月限定・炭火烤牡蠣", img:IMG.oyster, maps:"牡蠣小屋 糸島 加布里", tags:["台灣推薦","攻略必去"] },
+          { name:"海膽丼（夏季限定）", desc:"夏季限定・需早排隊", img:IMG.sushi2, maps:"ウニ丼 糸島 夏", tags:["IG熱點","攻略必去"] },
+          { name:"志摩之四季市場", desc:"直賣所・新鮮海産・在地蔬菜", img:IMG.seafood3, maps:"志摩の四季市場 糸島", tags:["攻略必去"] },
+          { name:"一蘭之森 限定拉麵", desc:"工廠限定版・附海景用餐", img:IMG.ramen2, maps:"一蘭の森 糸島", tags:["台灣推薦","IG熱點"] },
+          { name:"LONDON BUS CAFE 輕食", desc:"英倫巴士內用餐・打卡體驗", img:IMG.londonBus, maps:"LONDON BUS CAFE 糸島", tags:["IG熱點"] },
+          { name:"糸島新鮮海鮮丼", desc:"漁港直送・當天最新鮮", img:IMG.seafood1, maps:"海鮮丼 糸島 漁港", tags:["攻略必去"] },
         ]
       },
       {
         type:"night", emoji:"🌙", label:"傍晚 · 夫婦岩夕陽",
         title: "夫婦岩夕陽 · 日落百選",
         spots: [
-          { name:"夫婦岩 夕陽觀賞", desc:"日落前30分抵達・日本夕陽百選", img:P('1505118380757-91f5f5632de0'), maps:"桜井二見ヶ浦 夕日 糸島", tags:["IG熱點","攻略必去"] },
-          { name:"Beach Cafe SUNSET", desc:"夕陽海景咖啡・二見浦旁", img:COFFEE, maps:"Beach Cafe SUNSET 糸島", tags:["IG熱點"] },
+          { name:"夫婦岩 夕陽觀賞", desc:"日落前30分抵達・日本夕陽百選", img:IMG.itoshimaSunset, maps:"桜井二見ヶ浦 夕日 糸島", tags:["IG熱點","攻略必去"] },
+          { name:"Beach Cafe SUNSET", desc:"夕陽海景咖啡・二見浦旁", img:IMG.coffee3, maps:"Beach Cafe SUNSET 糸島", tags:["IG熱點"] },
         ],
         foods: [
-          { name:"糸島 夕陽カフェ", desc:"日落時分海景咖啡廳", img:COFFEE, maps:"糸島 夕日カフェ 海", tags:["IG熱點"] },
-          { name:"糸島 海鮮居酒屋", desc:"返市區前・新鮮海鮮締めくくり", img:SEAFOOD, maps:"糸島 海鮮居酒屋", tags:["攻略必去"] },
+          { name:"糸島 夕陽カフェ", desc:"日落時分海景咖啡廳", img:IMG.itoshimaSunset, maps:"糸島 夕日カフェ 海", tags:["IG熱點"] },
+          { name:"糸島 海鮮居酒屋", desc:"返市區前・新鮮海鮮締めくくり", img:IMG.seafood2, maps:"糸島 海鮮居酒屋", tags:["攻略必去"] },
           { name:"前原駅周邊居酒屋", desc:"糸島人の台所・在地居酒屋", emoji:"🍺", maps:"前原駅 居酒屋 糸島", tags:["攻略必去"] },
         ]
       },
@@ -875,52 +988,52 @@ const days = [
   {
     title: "福岡市區精華 + 返程",
     sub: "明太子博物館 · 大濠公園 · 福岡塔夕陽 · 購物返程",
-    img: P('1528360983277-13d401cdc186'),
+    img: IMG.day10,
     slots: [
       {
         type:"morning", emoji:"☀️", label:"早餐",
         title: "NATIVE Fukuoka 異國早餐",
         spots: [
-          { name:"NATIVE Fukuoka", desc:"印尼系咖啡廳・9:00~深夜通し", img:COFFEE, maps:"NATIVE Fukuoka 博多", tags:["IG熱點"] },
+          { name:"NATIVE Fukuoka", desc:"印尼系咖啡廳・9:00~深夜通し", img:IMG.coffee1, maps:"NATIVE Fukuoka 博多", tags:["IG熱點"] },
         ],
         foods: [
-          { name:"NATIVE Fukuoka", desc:"チキンジェノベーゼサンド・珍稀茶", img:COFFEE, maps:"NATIVE Fukuoka 博多", tags:["IG熱點"] },
-          { name:"gelato pique cafe", desc:"ピケベアクレープ・天神ソラリア", img:PANCAKE, maps:"gelato pique cafe ソラリアプラザ 天神", tags:["IG熱點"] },
-          { name:"グラニフカフェ", desc:"REC COFFEE監修・40種拉花・天神", img:COFFEE, maps:"グラニフカフェ 天神西通り", tags:["IG熱點"] },
-          { name:"和カフェ Tsumugi 天神", desc:"天神新開幕・和風甜點・全80席", img:SWEET, maps:"和カフェTsumugi 天神 ワンビル", tags:["IG熱點"] },
+          { name:"NATIVE Fukuoka", desc:"チキンジェノベーゼサンド・珍稀茶", img:IMG.coffee1, maps:"NATIVE Fukuoka 博多", tags:["IG熱點"] },
+          { name:"gelato pique cafe", desc:"ピケベアクレープ・天神ソラリア", img:IMG.pancake3, maps:"gelato pique cafe ソラリアプラザ 天神", tags:["IG熱點"] },
+          { name:"グラニフカフェ", desc:"REC COFFEE監修・40種拉花・天神", img:IMG.coffee4, maps:"グラニフカフェ 天神西通り", tags:["IG熱點"] },
+          { name:"和カフェ Tsumugi 天神", desc:"天神新開幕・和風甜點・全80席", img:IMG.sweet3, maps:"和カフェTsumugi 天神 ワンビル", tags:["IG熱點"] },
         ]
       },
       {
         type:"day", emoji:"🌤️", label:"上午/下午",
         title: "福岡市區精華 → 機場",
         spots: [
-          { name:"明太子博物館（ふくや）", desc:"免費參觀・明太子發源地・體驗教室", img:MENTA, maps:"ふくや明太子 博多", tags:["攻略必去","台灣推薦"] },
-          { name:"川端商店街", desc:"百年老街・傳統商店", img:P('1528360983277-13d401cdc186'), maps:"川端商店街 福岡", tags:["攻略必去"] },
-          { name:"大濠公園", desc:"城市湖畔散步・倒影絕景", img:P('1528360983277-13d401cdc186'), maps:"大濠公園 福岡", tags:["攻略必去","IG熱點"] },
-          { name:"福岡塔 夕陽", desc:"百道浜海景・夕陽觀景台", img:P('1542051841857-5f90071e7989'), maps:"福岡タワー", tags:["攻略必去","IG熱點"] },
-          { name:"永旺夢樂城福岡", desc:"最後補貨・多品牌集結", emoji:"🛍️", maps:"イオンモール福岡", tags:["攻略必去"] },
+          { name:"明太子博物館（ふくや）", desc:"免費參觀・明太子發源地・體驗教室", img:IMG.mentaikoMuseum, maps:"ふくや明太子 博多", tags:["攻略必去","台灣推薦"] },
+          { name:"川端商店街", desc:"百年老街・傳統商店", img:IMG.kawabata, maps:"川端商店街 福岡", tags:["攻略必去"] },
+          { name:"大濠公園", desc:"城市湖畔散步・倒影絕景", img:IMG.ohoriPark, maps:"大濠公園 福岡", tags:["攻略必去","IG熱點"] },
+          { name:"福岡塔 夕陽", desc:"百道浜海景・夕陽觀景台", img:IMG.fukuokaTower, maps:"福岡タワー", tags:["攻略必去","IG熱點"] },
+          { name:"永旺夢樂城福岡", desc:"最後補貨・多品牌集結", img:IMG.tenjin, maps:"イオンモール福岡", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"一蘭拉麵 本店", desc:"最後一碗・獨立隔間・豚骨", img:RAMEN, maps:"一蘭ラーメン博多本店", tags:["台灣推薦","Tabelog 3.71"] },
-          { name:"麵屋 ISHII", desc:"奶油明太子釜玉烏龍麵・最後早上", img:UDON, maps:"麺屋ISHII 博多", tags:["台灣推薦","攻略必去"] },
-          { name:"明太子定食（ふくや）", desc:"明太子発源店・各種吃法", img:MENTA, maps:"ふくや 博多 明太子", tags:["台灣推薦","攻略必去"] },
-          { name:"天麩羅処ひらお", desc:"炸蝦天婦羅・最後一次", emoji:"🍤", maps:"天ぷら処ひらお 天神", tags:["攻略必去"] },
-          { name:"博多華味鳥（ランチ）", desc:"水炊き白湯鍋・午間供應", emoji:"🍲", maps:"博多華味鳥 天神", tags:["台灣推薦","攻略必去"] },
+          { name:"一蘭拉麵 本店", desc:"最後一碗・獨立隔間・豚骨", img:IMG.ramen1, maps:"一蘭ラーメン博多本店", tags:["台灣推薦","Tabelog 3.71"] },
+          { name:"麵屋 ISHII", desc:"奶油明太子釜玉烏龍麵・最後早上", img:IMG.udon1, maps:"麺屋ISHII 博多", tags:["台灣推薦","攻略必去"] },
+          { name:"明太子定食（ふくや）", desc:"明太子発源店・各種吃法", img:IMG.menta1, maps:"ふくや 博多 明太子", tags:["台灣推薦","攻略必去"] },
+          { name:"天麩羅処ひらお", desc:"炸蝦天婦羅・最後一次", img:IMG.tempura, maps:"天ぷら処ひらお 天神", tags:["攻略必去"] },
+          { name:"博多華味鳥（ランチ）", desc:"水炊き白湯鍋・午間供應", img:IMG.hotpot, maps:"博多華味鳥 天神", tags:["台灣推薦","攻略必去"] },
         ]
       },
       {
         type:"night", emoji:"🌙", label:"機場 · 伴手禮",
         title: "福岡機場 伴手禮大採購",
         spots: [
-          { name:"福岡機場 3F 伴手禮", desc:"出發前最後採購・明太子・和菓子", emoji:"✈️", maps:"福岡空港 お土産", tags:["攻略必去"] },
+          { name:"福岡機場 3F 伴手禮", desc:"出發前最後採購・明太子・和菓子", img:IMG.airport, maps:"福岡空港 お土産", tags:["攻略必去"] },
         ],
         foods: [
-          { name:"一風堂伴手禮麵", desc:"機場限定・帶回台灣", img:RAMEN, maps:"一風堂 福岡空港", tags:["台灣推薦","攻略必去"] },
-          { name:"博多通りもん", desc:"最受歡迎和菓子・奶油饅頭", emoji:"🍡", maps:"博多通りもん 福岡空港", tags:["台灣推薦","攻略必去"] },
-          { name:"ふくや 明太子", desc:"福岡必買伴手禮No.1", img:MENTA, maps:"ふくや 明太子 福岡空港", tags:["台灣推薦","攻略必去"] },
-          { name:"椒房庵 明太子", desc:"高級明太子・禮盒包裝", img:MENTA, maps:"椒房庵 明太子 福岡空港", tags:["台灣推薦","攻略必去"] },
-          { name:"機場拉麵 博多麵工房", desc:"起飛前・最後一碗豚骨", img:RAMEN, maps:"博多麺工房 福岡空港", tags:["攻略必去"] },
-          { name:"資さんうどん 空港店", desc:"北九州名物・機場內", emoji:"🍜", maps:"資さんうどん 福岡空港", tags:["攻略必去"] },
+          { name:"一風堂伴手禮麵", desc:"機場限定・帶回台灣", img:IMG.ramen3, maps:"一風堂 福岡空港", tags:["台灣推薦","攻略必去"] },
+          { name:"博多通りもん", desc:"最受歡迎和菓子・奶油饅頭", img:IMG.wagashi, maps:"博多通りもん 福岡空港", tags:["台灣推薦","攻略必去"] },
+          { name:"ふくや 明太子", desc:"福岡必買伴手禮No.1", img:IMG.menta1, maps:"ふくや 明太子 福岡空港", tags:["台灣推薦","攻略必去"] },
+          { name:"椒房庵 明太子", desc:"高級明太子・禮盒包裝", img:IMG.menta2, maps:"椒房庵 明太子 福岡空港", tags:["台灣推薦","攻略必去"] },
+          { name:"機場拉麵 博多麵工房", desc:"起飛前・最後一碗豚骨", img:IMG.ramen4, maps:"博多麺工房 福岡空港", tags:["攻略必去"] },
+          { name:"資さんうどん 空港店", desc:"北九州名物・機場內", img:IMG.udon2, maps:"資さんうどん 福岡空港", tags:["攻略必去"] },
         ]
       }
     ]
