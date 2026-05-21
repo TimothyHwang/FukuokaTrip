@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>福岡十天之旅 🇯🇵</title>
+<style>
+  :root {
+    --red: #c0392b;
+    --red-light: #e74c3c;
+    --gold: #d4a017;
+    --dark: #1a1a2e;
+    --dark2: #16213e;
+    --dark3: #0f3460;
+    --cream: #fdf6e3;
+    --cream2: #f5efe0;
+    --green: #2d6a4f;
+    --text: #2c2c2c;
+    --text-light: #666;
+    --shadow: 0 4px 20px rgba(0,0,0,0.12);
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 500px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #c0392b 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=1600&q=80&fit=crop') center/cover no-repeat;
+    opacity: 0.35;
+  }
+  .hero-content { position: relative; z-index: 1; padding: 0 20px; }
+  .hero-jp { font-size: 1rem; letter-spacing: 0.5em; opacity: 0.8; margin-bottom: 12px; }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    margin-bottom: 16px;
+  }
+  .hero-sub { font-size: 1.1rem; opacity: 0.85; margin-bottom: 40px; }
+  .hero-date-box {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50px;
+    padding: 14px 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+  }
+  .hero-date-box label { opacity: 0.85; }
+  .hero-date-box input[type="date"] {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    font-family: inherit;
+  }
+  .hero-date-box input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+  .scroll-hint {
+    position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,0.6); font-size: 0.85rem; text-align: center;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+  /* ── CONTAINER ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .section-title h2 {
+    font-size: 1.8rem;
+    color: var(--red);
+    position: relative;
+    display: inline-block;
+  }
+  .section-title h2::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 3px;
+    background: var(--gold);
+    margin: 8px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ── DAY CARD ── */
+  .day-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+    background: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .day-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.16); }
+
+  .day-header {
+    position: relative;
+    height: 220px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .day-header img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .day-card:hover .day-header img { transform: scale(1.04); }
+  .day-header-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 20px 24px;
+    color: #fff;
+  }
+  .day-badge {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+    width: fit-content;
+  }
+  .day-header h3 { font-size: 1.4rem; font-weight: 800; text-shadow: 0 1px 8px rgba(0,0,0,0.5); }
+  .day-header .day-sub { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
+  .day-toggle {
+    position: absolute; top: 16px; right: 16px;
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(6px);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .day-card.open .day-toggle { transform: rotate(180deg); background: var(--red); }
+
+  /* ── DAY BODY ── */
+  .day-body {
+    display: none;
+    padding: 0;
+  }
+  .day-card.open .day-body { display: block; }
+
+  /* ── TIME SLOT ── */
+  .time-slot {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #f0ebe0;
+  }
+  .time-slot:last-child { border-bottom: none; }
+  .time-slot.night {
+    background: var(--dark);
+    color: #e0e0e0;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .time-slot.late-night {
+    background: #0d0d1a;
+    color: #ccc;
+    border-bottom: none;
+  }
+
+  .time-label {
+    width: 90px; min-width: 90px;
+    padding: 20px 0 20px 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    gap: 4px;
+    border-right: 2px solid #f0ebe0;
+  }
+  .time-slot.night .time-label { border-right-color: #2a2a4a; }
+  .time-slot.late-night .time-label { border-right-color: #1a1a3a; }
+  .time-emoji { font-size: 1.6rem; }
+  .time-text { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; color: var(--text-light); }
+  .time-slot.night .time-text,
+  .time-slot.late-night .time-text { color: #888; }
+
+  .time-content { flex: 1; padding: 20px 24px; }
+  .time-content h4 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+  .time-slot.night .time-content h4,
+  .time-slot.late-night .time-content h4 { color: #f0f0f0; }
+
+  /* ── SPOTS ── */
+  .spots { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .spot-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--cream2);
+    border: 1px solid #e8dfc8;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+  .time-slot.night .spot-tag { background: #1e1e3a; border-color: #3a3a5a; color: #d0d0e8; }
+  .time-slot.late-night .spot-tag { background: #1a1a30; border-color: #333360; color: #bbb; }
+
+  /* ── FOOD CARDS ── */
+  .food-section { margin-top: 12px; }
+  .food-label { font-size: 0.75rem; font-weight: 700; color: var(--red); letter-spacing: 0.08em; margin-bottom: 8px; }
+  .time-slot.night .food-label,
+  .time-slot.late-night .food-label { color: #e87070; }
+  .food-list { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .food-card {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--cream2);
+    border-radius: 10px;
+    overflow: hidden;
+    width: calc(50% - 5px);
+    min-width: 220px;
+    border: 1px solid #e8dfc8;
+  }
+  .time-slot.night .food-card { background: #1e1e3a; border-color: #3a3a5a; }
+  .time-slot.late-night .food-card { background: #1a1a30; border-color: #333360; }
+
+  .food-card img {
+    width: 72px; height: 72px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .food-card .food-img-placeholder {
+    width: 72px; height: 72px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #f0ebe0, #e8dfc8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+  }
+  .time-slot.night .food-card .food-img-placeholder,
+  .time-slot.late-night .food-card .food-img-placeholder {
+    background: linear-gradient(135deg, #1e1e3a, #2a2a4a);
+  }
+  .food-info { padding: 8px 10px; flex: 1; min-width: 0; }
+  .food-name { font-size: 0.85rem; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .time-slot.night .food-name,
+  .time-slot.late-night .food-name { color: #e0e0e0; }
+  .food-desc { font-size: 0.75rem; color: var(--text-light); margin-top: 3px; line-height: 1.4; }
+  .time-slot.night .food-desc,
+  .time-slot.late-night .food-desc { color: #888; }
+
+  /* ── LATE NIGHT SPECIAL ── */
+  .late-night-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+  .late-night-item {
+    background: #1e1e3a;
+    border: 1px solid #3a3a6a;
+    border-radius: 10px;
+    padding: 12px 16px;
+    flex: 1; min-width: 160px;
+  }
+  .late-night-item .lni-icon { font-size: 1.4rem; margin-bottom: 6px; }
+  .late-night-item .lni-name { font-size: 0.85rem; font-weight: 700; color: #e0d0ff; margin-bottom: 4px; }
+  .late-night-item .lni-desc { font-size: 0.75rem; color: #888; line-height: 1.4; }
+  .late-night-item.warning { border-color: #8b4513; background: #1a0f0a; }
+  .late-night-item.warning .lni-name { color: #ffa07a; }
+
+  /* ── NAKASU GUIDE ── */
+  .nakasu-section {
+    background: var(--dark);
+    border-radius: var(--radius);
+    padding: 40px;
+    margin-top: 60px;
+    color: #e0e0e0;
+  }
+  .nakasu-section h2 { color: #e87070; font-size: 1.5rem; margin-bottom: 8px; }
+  .nakasu-section .nakasu-sub { color: #888; font-size: 0.9rem; margin-bottom: 28px; }
+  .nakasu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .nakasu-card {
+    background: #1e1e3a;
+    border: 1px solid #3a3a6a;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .nakasu-card .nk-icon { font-size: 2rem; margin-bottom: 10px; }
+  .nakasu-card .nk-title { font-size: 0.95rem; font-weight: 700; color: #d0d0ff; margin-bottom: 8px; }
+  .nakasu-card .nk-desc { font-size: 0.8rem; color: #888; line-height: 1.5; }
+  .nakasu-card.adult { border-color: #8b3a6a; background: #1e0f1a; }
+  .nakasu-card.adult .nk-title { color: #ffb0c8; }
+  .nakasu-warning {
+    margin-top: 20px;
+    background: #1a0f0a;
+    border: 1px solid #8b4513;
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 0.85rem;
+    color: #ffa07a;
+    line-height: 1.6;
+  }
+  .budget-table { margin-top: 20px; width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .budget-table th { text-align: left; padding: 8px 12px; background: #1e1e3a; color: #d0d0ff; }
+  .budget-table td { padding: 8px 12px; border-top: 1px solid #2a2a4a; color: #bbb; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--dark2);
+    color: #888;
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 0.85rem;
+  }
+  .footer .footer-logo { font-size: 2rem; margin-bottom: 12px; }
+  .footer .footer-title { color: #ccc; font-size: 1rem; margin-bottom: 8px; }
+  .footer-tips { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 20px; }
+  .footer-tip {
+    background: #1e1e3a;
+    border: 1px solid #3a3a6a;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    color: #aaa;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .food-card { width: 100%; }
+    .time-label { width: 70px; min-width: 70px; }
+    .nakasu-section { padding: 24px 20px; }
+    .day-header { height: 180px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-jp">FUKUOKA　福岡之旅</div>
+    <h1>福岡 十天之旅</h1>
+    <p class="hero-sub">九州最大城市 · 美食天堂 · 溫泉秘境 · 夜不眠之都</p>
+    <div class="hero-date-box">
+      <label>出發日期</label>
+      <input type="date" id="startDate" onchange="updateDates()">
+      <span id="dateHint" style="opacity:0.7;font-size:0.8rem;">（選填，可留空）</span>
+    </div>
+  </div>
+  <div class="scroll-hint">▼ 向下查看行程</div>
+</section>
+
+<!-- ITINERARY -->
+<div class="container">
+  <div class="section-title">
+    <h2>十天完整行程</h2>
+  </div>
+
+  <div id="itinerary"></div>
+
+  <!-- NAKASU GUIDE -->
+  <div class="nakasu-section">
+    <h2>🌃 中洲深夜娛樂完整指南</h2>
+    <p class="nakasu-sub">福岡中洲是日本三大歡樂街之一，合法場所林立，以下分類整理</p>
+
+    <div class="nakasu-grid">
+      <div class="nakasu-card">
+        <div class="nk-icon">🍜</div>
+        <div class="nk-title">中洲屋台</div>
+        <div class="nk-desc">22:00 ~ 凌晨 3:00<br>露天拉麵、博多一口餃子、烤物<br>觀光最友善，平均 1,000~2,000 円</div>
+      </div>
+      <div class="nakasu-card">
+        <div class="nk-icon">🍺</div>
+        <div class="nk-title">居酒屋 はしご酒</div>
+        <div class="nk-desc">多間穿梭喝酒<br>さんかくしかく（深夜 4:00 收）<br>博多おっしょい（深夜 3:00）</div>
+      </div>
+      <div class="nakasu-card">
+        <div class="nk-icon">🍸</div>
+        <div class="nk-title">西中洲 Bar 街</div>
+        <div class="nk-desc">路地裏高質感調酒吧<br>落ち着いた大人空間<br>預算 3,000~8,000 円</div>
+      </div>
+      <div class="nakasu-card">
+        <div class="nk-icon">🎭</div>
+        <div class="nk-title">ショークラブ</div>
+        <div class="nk-desc">ゼロガール（舞蹈+魔術秀）<br>オールディーズ（1960年代生演奏）<br>THE SHOOTING BAR（射擊體驗）</div>
+      </div>
+      <div class="nakasu-card adult">
+        <div class="nk-icon">♨️</div>
+        <div class="nk-title">ソープランド（泡泡浴）</div>
+        <div class="nk-desc">合法成人娛樂設施<br>中洲・博多區皆有分布<br>預算 15,000~40,000 円<br>需外國人可入店確認</div>
+      </div>
+      <div class="nakasu-card adult">
+        <div class="nk-icon">🌙</div>
+        <div class="nk-title">風俗・キャバクラ</div>
+        <div class="nk-desc">キャバクラ（小姐陪酒店）<br>ガールズバー（女性吧台）<br>入店前務必確認料金體系</div>
+      </div>
+    </div>
+
+    <div class="nakasu-warning">
+      ⚠️ <strong>重要提醒：</strong>路邊攬客（キャッチ）請勿跟隨，多為高收費陷阱。入店前主動確認「基本料金・指名料・飲み代」。外國人入店部分設施有限制，建議選擇明確標示 OK 的店家。中洲深夜仍有人潮，治安整體良好但需注意個人財物。
+    </div>
+
+    <table class="budget-table">
+      <thead>
+        <tr><th>預算</th><th>推薦玩法</th><th>場所類型</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>〜5,000 円</td><td>屋台ラーメン + 一口餃子 + 生ビール はしご</td><td>屋台 / 立ち飲み</td></tr>
+        <tr><td>〜10,000 円</td><td>もつ鍋ディナー + 西中洲バー 2~3 軒</td><td>居酒屋 + Bar</td></tr>
+        <tr><td>〜20,000 円</td><td>キャバクラ 1 セット + ガールズバー</td><td>風俗（軟性）</td></tr>
+        <tr><td>15,000~40,000 円</td><td>ソープランド（視等級而定）</td><td>ソープ</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">⛩️</div>
+  <div class="footer-title">福岡十天之旅 · 行程展示</div>
+  <p>行程資料整理自各大旅遊攻略，實際狀況以現場為準</p>
+  <div class="footer-tips">
+    <div class="footer-tip">🚇 北九州 Pass｜5日制 JR 鐵路券</div>
+    <div class="footer-tip">🎫 福岡悠遊卡｜地鐵無限搭</div>
+    <div class="footer-tip">🌸 由布院之森｜需提前訂位</div>
+    <div class="footer-tip">💴 建議每日預算 10,000~15,000 円</div>
+  </div>
+</footer>
+
+<script>
+const days = [
+  {
+    title: "抵達博多",
+    sub: "JR博多City · 中洲屋台初體驗",
+    img: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&q=80&fit=crop",
+    slots: [
+      {
+        type: "morning", emoji: "☀️", label: "早餐",
+        title: "THE ALLDAY ORTO",
+        spots: ["博多駅東 徒步5分", "福岡縣產食材早餐套餐", "附設奶酪工房"],
+        foods: [
+          { img: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&q=80&fit=crop", name: "早餐套餐", desc: "縣產野菜＋自製鮮乳酪" },
+        ]
+      },
+      {
+        type: "day", emoji: "🌤️", label: "上午/下午",
+        title: "博多市區探索",
+        spots: ["JR博多City 購物", "博多運河城（鋼彈水舞秀）", "川端商店街尋寶", "辦理住宿入住"],
+        foods: [
+          { img: "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=200&q=80&fit=crop", name: "一双拉麵", desc: "博多車站東本店・豚骨" },
+          { img: "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=200&q=80&fit=crop", name: "博多一番街", desc: "車站地下美食街" },
+        ]
+      },
+      {
+        type: "night", emoji: "🌙", label: "晚餐",
+        title: "博多拉麵 ShinShin 天神本店",
+        spots: ["Tabelog 高分名店", "濃厚豚骨湯頭＋極細麵", "溏心蛋必點"],
+        foods: [
+          { img: "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=200&q=80&fit=crop", name: "ShinShin 拉麵", desc: "清爽豚骨・在地人最愛" },
+        ]
+      },
+      {
+        type: "late", emoji: "🌃", label: "深夜",
+        title: "中洲屋台初體驗",
+        lateItems: [
+          { icon: "🍜", name: "中洲屋台", desc: "22:00 開始・露天拉麵＋餃子" },
+          { icon: "🍺", name: "博多生ビール", desc: "路邊喝到凌晨" },
+          { icon: "🎭", name: "中洲散策", desc: "感受歡樂街氛圍" },
+          { icon: "⚠️", name: "注意", desc: "勿跟路邊攬客", warning: true },
+        ]
+      }
+    ]
+  },
+  {
+    title: "佐世保 + 長崎",
+    sub: "北九州 Pass 第1日 · 九十九島 · 稻佐山夜景",
+    img: "https://images.unsplash.com/photo-1565008576549-57569a49371d?w=900&q=80&fit=crop",
+    slots: [
+      {
+        type: "morning", emoji: "☀️", label: "早餐",
+        title: "博多站月台便當",
+        spots: ["博多一番街晨食外帶", "車上享用・出發前往佐世保"],
+        foods: [
+          { emoji: "🍱", name: "駅弁", desc: "博多站月台特選便當" },
+        ]
+      },
+      {
+        type: "day", emoji: "🌤️", label: "上午/下午",
+        title: "佐世保 → 長崎",
+        spots: ["九十九島遊覽船（日本百景）", "佐世保漢堡巡禮", "哥拉巴園（世界遺產）", "大浦天主堂"],
+        foods: [
+          { img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&q=80&fit=crop", name: "佐世保漢堡", desc: "Big Man 本店・在地名物" },
+          { emoji: "🎂", name: "長崎蛋糕", desc: "文明堂・傳統カステラ" },
+        ]
+      },
+      {
+        type: "night", emoji: "🌙", label: "晚餐",
+        title: "長崎什錦麵 ちゃんぽん",
+        spots: ["四海樓（ちゃんぽん發源店）", "長崎港周邊海鮮", "路面電車漫遊"],
+        foods: [
+          { emoji: "🍜", name: "ちゃんぽん", desc: "四海樓・什錦麵發源地" },
+          { emoji: "🦞", name: "長崎海鮮", desc: "港口直送新鮮漁獲" },
+        ]
+      },
+      {
+        type: "late", emoji: "🌃", label: "深夜",
+        title: "稻佐山夜景 · 新日本三大夜景",
+        lateItems: [
+          { icon: "🚡", name: "稻佐山纜車", desc: "21:00 前搭乘上山" },
+          { icon: "🌃", name: "長崎夜景", desc: "新日本三大夜景之一" },
+          { icon: "🍰", name: "山頂咖啡廳", desc: "夜景配甜點・浪漫滿分" },
+        ]
+      }
+    ]
+  },
+  {
+    title: "長崎 + 熊本",
+    sub: "北九州 Pass 第2日 · 平和公園 · 眼鏡橋",
+    img: "https://images.unsplash.com/photo-1590559899731-a382839e5549?w=900&q=80&fit=crop",
+    slots: [
+      {
+        type: "morning", emoji: "☀️", label: "早餐",
+        title: "文明堂 長崎蛋糕配咖啡",
+        spots: ["老舖傳統カステラ", "長崎市內老街氛圍"],
+        foods: [
+          { emoji: "🎂", name: "長崎カステラ", desc: "文明堂・百年老舖傳統口味" },
+        ]
+      },
+      {
+        type: "day", emoji: "🌤️", label: "上午/下午",
+        title: "長崎歷史散策 → 熊本",
+        spots: ["平和公園（原爆紀念地）", "原爆資料館（免費）", "眼鏡橋（日本最古石橋）", "路面電車漫遊長崎", "搭車前往熊本城"],
+        foods: [
+          { emoji: "🍜", name: "長崎皿烏龍麵", desc: "麵上淋芡・長崎獨有吃法" },
+        ]
+      },
+      {
+        type: "night", emoji: "🌙", label: "晚餐",
+        title: "熊本黑拉麵",
+        spots: ["熊本城夜間散策（外觀）", "下通商店街逛街"],
+        foods: [
+          { emoji: "🍜", name: "熊本黑拉麵", desc: "黑蒜油豚骨・濃厚香醇" },
+          { emoji: "🐴", name: "馬肉握壽司", desc: "熊本特產・當地必嚐" },
+        ]
+      },
+      {
+        type: "late", emoji: "🌃", label: "深夜",
+        title: "熊本下通夜間漫步",
+        lateItems: [
+          { icon: "🛍️", name: "下通商店街", desc: "深夜仍有部分店家營業" },
+          { icon: "🐻", name: "熊本熊伴手禮", desc: "便利商店限定版" },
+          { icon: "🍺", name: "熊本居酒屋", desc: "當地燒酎體驗" },
+        ]
+      }
+    ]
+  },
+  {
+    title: "熊本 + 返回福岡",
+    sub: "北九州 Pass 第3日 · 熊本城 · 天神地下街",
+    img: "https://images.unsplash.com/photo-1590559899731-a382839e5549?w=900&q=80&fit=crop",
+    slots: [
+      {
+        type: "morning", emoji: "☀️", label: "早餐",
+        title: "太平燕（熊本晨食名物）",
+        spots: ["春雨什錦湯麵", "熊本在地早餐文化", "紅蘿蔔・木耳・蝦等配料"],
+        foods: [
+          { emoji: "🍜", name: "太平燕", desc: "春雨湯麵・熊本早餐文化" },
+        ]
+      },
+      {
+        type: "day", emoji: "🌤️", label: "上午/下午",
+        title: "熊本精華 → 返回福岡",
+        spots: ["熊本熊廣場（打卡）", "水前寺成趣園散步", "熊本城復原天守閣", "搭新幹線返回福岡"],
+        foods: [
+          { emoji: "🐴", name: "馬刺し", desc: "生馬肉・熊本最著名特產" },
+          { emoji: "🍱", name: "からし蓮根", desc: "芥末蓮藕・熊本限定" },
+        ]
+      },
+      {
+        type: "night", emoji: "🌙", label: "晚餐",
+        title: "麵屋兼虎 天神本店",
+        spots: ["Tabelog 日本西部百名店", "濃厚魚介豚骨沾麵", "辛辛沾麵辣到滿足"],
+        foods: [
+          { img: "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=200&q=80&fit=crop", name: "辛辛沾麵", desc: "兼虎・Tabelog 百名店" },
+        ]
+      },
+      {
+        type: "late", emoji: "🌃", label: "深夜",
+        title: "天神・西中洲 Bar 街",
+        lateItems: [
+          { icon: "🍸", name: "西中洲路地裏 Bar", desc: "高質感調酒・預算 5,000 円+" },
+          { icon: "🎵", name: "オールディーズ", desc: "1960年代生演奏 Live Bar" },
+          { icon: "💃", name: "ゼロガール", desc: "舞蹈＋魔術秀・エンタメ" },
+        ]
+      }
+    ]
+  },
+  {
+    title: "由布院",
+    sub: "北九州 Pass 第4日 · 金鱗湖 · 溫泉旅館",
+    img: "https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=900&q=80&fit=crop",
+    slots: [
+      {
+        type: "morning", emoji: "☀️", label: "早餐",
+        title: "soel 古民家咖啡廳",
+        spots: ["築60年古民家改建", "自家製フォカッチャ", "旬野菜套餐 1,700 円"],
+        foods: [
+          { emoji: "🥐", name: "自製佛卡夏麵包", desc: "soel・古民家氛圍早餐" },
+        ]
+      },
+      {
+        type: "day", emoji: "🌤️", label: "上午/下午",
+        title: "由布院之森 → 金鱗湖",
+        spots: ["由布院之森觀光列車（需預訂）", "金鱗湖晨霧散步", "湯之坪街道特色小店", "ガラスの森（玻璃美術館）", "由布岳眺望"],
+        foods: [
+          { emoji: "🥩", name: "飛驒牛可樂餅", desc: "湯之坪街道必吃小食" },
+          { emoji: "🍡", name: "溫泉饅頭", desc: "由布院定番伴手禮" },
+          { emoji: "🍦", name: "ジェラート", desc: "當地義式冰淇淋小店" },
+        ]
+      },
+      {
+        type: "night", emoji: "🌙", label: "晚餐",
+        title: "溫泉旅館 懷石料理",
+        spots: ["一泊二食方案", "私人露天風呂（包房）", "由布院御三家之一"],
+        foods: [
+          { emoji: "🍱", name: "懷石料理", desc: "10道以上精緻和食套餐" },
+          { emoji: "🍶", name: "大分地酒", desc: "旅館自選清酒・燒酎" },
+        ]
+      },
+      {
+        type: "late", emoji: "🌃", label: "深夜",
+        title: "旅館溫泉 · 星空時光",
+        lateItems: [
+          { icon: "♨️", name: "露天風呂", desc: "旅館包房私湯・23:00 前" },
+          { icon: "⭐", name: "由布院星空", desc: "幾乎無光害・夏季銀河" },
+          { icon: "🌙", name: "深夜靜謐", desc: "由布院 23:00 後幾乎無店" },
+        ]
+      }
+    ]
+  },
+  {
+    title: "別府 + 返回福岡",
+    sub: "北九州 Pass 第5日 · 地獄巡禮 · 溫泉布丁",
+    img: "https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=900&q=80&fit=crop",
+    slots: [
+      {
+        type: "morning", emoji: "☀️", label: "早餐",
+        title: "溫泉旅館日式早膳",
+        spots: ["和食套餐：白飯・味噌湯・漬物", "附溫泉晨浴", "出發前往別府"],
+        foods: [
+          { emoji: "🍚", name: "日式和食套餐", desc: "旅館早膳・附早湯" },
+        ]
+      },
+      {
+        type: "day", emoji: "🌤️", label: "上午/下午",
+        title: "別府地獄八湯巡禮",
+        spots: ["海地獄（鈷藍色）", "血の池地獄（紅色）", "龍巻地獄（間歇噴泉）", "白池地獄"],
+        foods: [
+          { emoji: "🥚", name: "地獄蒸玉米＋溫泉蛋", desc: "蒸氣料理・別府必吃" },
+          { emoji: "🦐", name: "地獄蒸海鮮", desc: "新鮮食材蒸熟・甜味鎖住" },
+        ]
+      },
+      {
+        type: "night", emoji: "🌙", label: "晚餐",
+        title: "溫泉布丁 + 冷麵",
+        spots: ["岡本屋売店（溫泉布丁名店）", "別府冷麵（焼きそば風）", "搭車返回福岡"],
+        foods: [
+          { img: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&q=80&fit=crop", name: "溫泉布丁", desc: "岡本屋・焦糖濃厚版" },
+          { emoji: "🍜", name: "別府冷麵", desc: "在地風格・口感特別" },
+        ]
+      },
+      {
+        type: "late", emoji: "🌃", label: "深夜",
+        title: "深夜博多拉麵 · 歸途",
+        lateItems: [
+          { icon: "🚃", name: "搭由布院之森返回", desc: "確認末班車時間" },
+          { icon: "🍜", name: "博多深夜拉麵", desc: "回到福岡・宵夜充電" },
+          { icon: "♨️", name: "博多溫泉酒店", desc: "部分飯店有大浴場" },
+        ]
+      }
+    ]
+  },
+  {
+    title: "門司港 + 下關",
+    sub: "大正浪漫懷舊區 · 關門海峽 · 河豚料理",
+    img: "https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=900&q=80&fit=crop",
+    slots: [
+      {
+        type: "morning", emoji: "☀️", label: "早餐",
+        title: "ROUND COUNTER",
+        spots: ["ダブルエッグトースト（招牌）", "REC COFFEE 精品咖啡豆", "圓形吧台座位・文青氛圍"],
+        foods: [
+          { emoji: "🍳", name: "ダブルエッグトースト", desc: "ROUND COUNTER・必點早餐" },
+        ]
+      },
+      {
+        type: "day", emoji: "🌤️", label: "上午/下午",
+        title: "門司港 → 渡船 → 下關",
+        spots: ["門司港懷舊區（大正西洋建築）", "舊門司稅關・三井俱樂部", "搭船渡關門海峽（5分鐘）", "下關唐戶市場（週末最熱鬧）", "小倉城（順遊）"],
+        foods: [
+          { img: "https://images.unsplash.com/photo-1534482421-64566f976cfa?w=200&q=80&fit=crop", name: "門司港燒咖哩", desc: "地區名物・深皿焼きカレー" },
+          { emoji: "🐡", name: "下關河豚料理", desc: "唐戶市場・鮮度頂級" },
+          { emoji: "🍣", name: "海鮮丼", desc: "唐戶市場週末屋台" },
+        ]
+      },
+      {
+        type: "night", emoji: "🌙", label: "晚餐",
+        title: "返回福岡・居酒屋",
+        spots: ["小倉城夜景（順遊）", "搭車返回博多・天神"],
+        foods: [
+          { emoji: "🍖", name: "もつ鍋", desc: "博多特色内臓火鍋" },
+          { emoji: "🍢", name: "おでん", desc: "關東煮・中洲深夜必備" },
+        ]
+      },
+      {
+        type: "late", emoji: "🌃", label: "深夜",
+        title: "中洲歡樂街深度探索",
+        lateItems: [
+          { icon: "🍜", name: "中洲屋台", desc: "第二次體驗・換不同攤位" },
+          { icon: "🍸", name: "居酒屋 はしご", desc: "3~4 間穿梭・5,000 円" },
+          { icon: "💃", name: "キャバクラ", desc: "小姐陪酒・確認料金再入" },
+          { icon: "♨️", name: "ソープランド", desc: "泡泡浴・中洲區有多間" },
+        ]
+      }
+    ]
+  },
+  {
+    title: "太宰府 + 柳川",
+    sub: "學問之神 · 九州威尼斯 · 鰻魚飯",
+    img: "https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=900&q=80&fit=crop",
+    slots: [
+      {
+        type: "morning", emoji: "☀️", label: "早餐",
+        title: "白金茶房（一軒家パンケーキ）",
+        spots: ["築60年邸宅改建咖啡廳", "福岡縣產小麥100%鬆餅", "8:00 開始・早起必排"],
+        foods: [
+          { emoji: "🥞", name: "季節水果鬆餅", desc: "白金茶房・1,760 円" },
+        ]
+      },
+      {
+        type: "day", emoji: "🌤️", label: "上午/下午",
+        title: "太宰府 → 柳川",
+        spots: ["太宰府天滿宮（學業祈願）", "寶滿宮竈門神社（戀愛聖地）", "隈研吾設計 STARBUCKS 打卡", "九州國立博物館（可選）", "柳川遊船（九州威尼斯）", "御花松濤園"],
+        foods: [
+          { emoji: "🍡", name: "梅枝餅", desc: "表參道手燒・學問加持" },
+          { img: "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=200&q=80&fit=crop", name: "柳川鰻魚飯", desc: "むつごろう屋・蒸籠名物" },
+        ]
+      },
+      {
+        type: "night", emoji: "🌙", label: "晚餐",
+        title: "返回福岡・天神地下街",
+        spots: ["天神地下街深夜逛街", "天神商圈購物（21:00 前）"],
+        foods: [
+          { emoji: "🍜", name: "久留米大砲拉麵", desc: "創業70年・在地票選第一" },
+          { emoji: "🍶", name: "天神居酒屋", desc: "焼き鳥＋清酒下班情調" },
+        ]
+      },
+      {
+        type: "late", emoji: "🌃", label: "深夜",
+        title: "天神・中洲輕鬆夜遊",
+        lateItems: [
+          { icon: "🍜", name: "深夜拉麵", desc: "ShinShin 或屋台・24:00+" },
+          { icon: "🎵", name: "Live Bar", desc: "天神周邊爵士＋搖滾吧" },
+          { icon: "🌙", name: "中洲散步", desc: "霓虹燈夜景拍照" },
+        ]
+      }
+    ]
+  },
+  {
+    title: "福岡市區深度",
+    sub: "明太子博物館 · 一蘭拉麵 · 福岡塔夕陽",
+    img: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&q=80&fit=crop",
+    slots: [
+      {
+        type: "morning", emoji: "☀️", label: "早餐",
+        title: "JWTカフェ（北欧風）",
+        spots: ["中央區高砂 8:00 開始", "北歐風格室內設計", "サイラーのパン使用"],
+        foods: [
+          { emoji: "🍞", name: "フレンチトースト", desc: "JWTカフェ・1,100 円" },
+          { emoji: "☕", name: "精品咖啡", desc: "高品質豆子・手沖" },
+        ]
+      },
+      {
+        type: "day", emoji: "🌤️", label: "上午/下午",
+        title: "福岡市區精華",
+        spots: ["明太子博物館（ふくや）免費", "川端商店街百年老街", "大濠公園湖畔散步", "福岡城跡散策"],
+        foods: [
+          { img: "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=200&q=80&fit=crop", name: "一蘭拉麵 本店", desc: "獨立隔間・必朝聖豚骨" },
+          { img: "https://images.unsplash.com/photo-1582450871972-ab5ca641643d?w=200&q=80&fit=crop", name: "明太子定食", desc: "ふくや 博多明太子發源店" },
+        ]
+      },
+      {
+        type: "night", emoji: "🌙", label: "晚餐",
+        title: "福岡塔夕陽 + 海鮮",
+        spots: ["福岡塔觀景台夕陽（18:00 前後）", "百道浜海濱散步", "シーホークホテル周邊餐廳"],
+        foods: [
+          { emoji: "🦀", name: "福岡海鮮居酒屋", desc: "博多灣直送・當季漁獲" },
+          { emoji: "🍱", name: "水炊き鍋", desc: "博多名物白湯雞肉鍋" },
+        ]
+      },
+      {
+        type: "late", emoji: "🌃", label: "深夜",
+        title: "中洲屋台 · 全力體驗夜",
+        lateItems: [
+          { icon: "🍜", name: "屋台ラーメン", desc: "中洲・22:00 熱鬧開始" },
+          { icon: "🥟", name: "博多一口餃子", desc: "必點・小巧焦香" },
+          { icon: "♨️", name: "ソープランド", desc: "中洲・行程最後一次" },
+          { icon: "🍸", name: "Bar 收尾", desc: "西中洲オーセンティックBar" },
+        ]
+      }
+    ]
+  },
+  {
+    title: "購物返程",
+    sub: "博多運河城 · 永旺夢樂城 · 機場伴手禮",
+    img: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&q=80&fit=crop",
+    slots: [
+      {
+        type: "morning", emoji: "☀️", label: "早餐",
+        title: "NATIVE Fukuoka",
+        spots: ["印尼系咖啡廳・日本初上陸（2025.10）", "9:00 開始・通し營業至深夜", "チキンジェノベーゼサンド"],
+        foods: [
+          { emoji: "🥪", name: "チキンサンド", desc: "NATIVE・異國風早餐" },
+          { emoji: "☕", name: "特殊茶類", desc: "少見珍稀茶葉品項" },
+        ]
+      },
+      {
+        type: "day", emoji: "🌤️", label: "上午/下午",
+        title: "最後採購衝刺",
+        spots: ["博多運河城（最後巡禮）", "永旺夢樂城福岡（補貨）", "前往福岡機場"],
+        foods: [
+          { emoji: "🍜", name: "一風堂伴手禮麵", desc: "機場限定・帶回台灣" },
+          { emoji: "🍡", name: "博多通りもん", desc: "最受歡迎和菓子伴手禮" },
+          { img: "https://images.unsplash.com/photo-1582450871972-ab5ca641643d?w=200&q=80&fit=crop", name: "明太子", desc: "ふくや・椒房庵・多款選擇" },
+        ]
+      },
+      {
+        type: "night", emoji: "🌙", label: "機場候機",
+        title: "福岡機場・準備回家",
+        spots: ["機場3F 伴手禮賣場", "博多ラーメン空港店（最後一碗）"],
+        foods: [
+          { emoji: "🍜", name: "機場拉麵", desc: "離開前・最後一碗豚骨" },
+          { emoji: "🛍️", name: "免稅商品", desc: "清酒・零食・美妝" },
+        ]
+      }
+    ]
+  }
+];
+
+function createFoodCard(food) {
+  if (food.img) {
+    return `<div class="food-card">
+      <img src="${food.img}" alt="${food.name}" onerror="this.parentNode.innerHTML='<div class=food-img-placeholder>${food.emoji||'🍽️'}</div>'+ this.parentNode.innerHTML.replace(/<img[^>]*>/,'')">
+      <div class="food-info">
+        <div class="food-name">${food.name}</div>
+        <div class="food-desc">${food.desc}</div>
+      </div>
+    </div>`;
+  }
+  return `<div class="food-card">
+    <div class="food-img-placeholder">${food.emoji || '🍽️'}</div>
+    <div class="food-info">
+      <div class="food-name">${food.name}</div>
+      <div class="food-desc">${food.desc}</div>
+    </div>
+  </div>`;
+}
+
+function createSlotHTML(slot) {
+  let typeClass = '';
+  if (slot.type === 'night') typeClass = 'night';
+  if (slot.type === 'late') typeClass = 'late-night';
+
+  let contentHTML = `<h4>${slot.title}</h4>`;
+
+  if (slot.spots) {
+    contentHTML += `<div class="spots">${slot.spots.map(s => `<span class="spot-tag">📍 ${s}</span>`).join('')}</div>`;
+  }
+
+  if (slot.foods && slot.foods.length > 0) {
+    contentHTML += `<div class="food-section">
+      <div class="food-label">🍽️ 推薦美食</div>
+      <div class="food-list">${slot.foods.map(createFoodCard).join('')}</div>
+    </div>`;
+  }
+
+  if (slot.lateItems) {
+    contentHTML += `<div class="late-night-grid">${slot.lateItems.map(item =>
+      `<div class="late-night-item${item.warning ? ' warning' : ''}">
+        <div class="lni-icon">${item.icon}</div>
+        <div class="lni-name">${item.name}</div>
+        <div class="lni-desc">${item.desc}</div>
+      </div>`
+    ).join('')}</div>`;
+  }
+
+  return `<div class="time-slot ${typeClass}">
+    <div class="time-label">
+      <span class="time-emoji">${slot.emoji}</span>
+      <span class="time-text">${slot.label}</span>
+    </div>
+    <div class="time-content">${contentHTML}</div>
+  </div>`;
+}
+
+function renderItinerary(startDate) {
+  const container = document.getElementById('itinerary');
+  container.innerHTML = days.map((day, i) => {
+    let dateLabel = '';
+    if (startDate) {
+      const d = new Date(startDate);
+      d.setDate(d.getDate() + i);
+      const opts = { month: 'long', day: 'numeric', weekday: 'short' };
+      dateLabel = d.toLocaleDateString('zh-TW', opts);
+    }
+    const badge = dateLabel ? dateLabel : `第 ${i + 1} 天`;
+    return `<div class="day-card" id="day-${i}">
+      <div class="day-header" onclick="toggleDay(${i})">
+        <img src="${day.img}" alt="${day.title}" loading="lazy"
+             onerror="this.style.display='none'">
+        <div class="day-header-overlay">
+          <span class="day-badge">${badge}</span>
+          <h3>${day.title}</h3>
+          <div class="day-sub">${day.sub}</div>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        ${day.slots.map(createSlotHTML).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleDay(i) {
+  const card = document.getElementById('day-' + i);
+  card.classList.toggle('open');
+}
+
+function updateDates() {
+  const val = document.getElementById('startDate').value;
+  renderItinerary(val || null);
+}
+
+renderItinerary(null);
+</script>
+</body>
+</html>
